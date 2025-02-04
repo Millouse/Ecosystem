@@ -113,23 +113,23 @@ func roulette_selection():
 	# Fallback to last creature just in case it fails for some reason
 	return current_population[-1]
 
+# Genes from parent1 and parent2
 func crossover(genes1, genes2):
 	var new_genes = {}
 	# Randomly select genes from either parent
-	new_genes.jump_force = genes1.jump_force if randf() < 0.5 else genes2.jump_force
-	new_genes.direction_x = genes1.direction_x if randf() < 0.5 else genes2.direction_x
-	new_genes.direction_z = genes1.direction_z if randf() < 0.5 else genes2.direction_z
+	# TODO : Figure out how the crossover can be made without harcoding, same for mutate
+	new_genes.color = genes1.color if randf() < 0.5 else genes2.color
+	new_genes.attention_span = genes1.attention_span if randf() < 0.5 else genes2.attention_span
+	new_genes.speed = genes1.speed if randf() < 0.5 else genes2.speed
 	return new_genes
 
 func mutate(genes):
 	if randf() < 0.1:  # 10% mutation chance
-		genes.jump_force += randf_range(-1.0, 1.0)
+		genes.color += Color(randf(), randf(), randf())
 	if randf() < 0.1:
-		genes.direction_x += randf_range(-0.2, 0.2)
-		genes.direction_x = clamp(genes.direction_x, -1.0, 1.0)
+		genes.attention_span += randf()
 	if randf() < 0.1:
-		genes.direction_z += randf_range(-0.2, 0.2)
-		genes.direction_z = clamp(genes.direction_z, -1.0, 1.0)
+		genes.speed += randf()
 
 func spawn_new_creature(genes = null):
 	var creature = creature_scene.instantiate()
