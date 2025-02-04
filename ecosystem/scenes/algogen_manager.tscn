@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvat2waxddg1v"]
+
+[ext_resource type="Script" path="res://algogen_manager.gd" id="1_pvvlt"]
+
+[node name="AlgogenManager" type="Node3D"]
+script = ExtResource("1_pvvlt")
