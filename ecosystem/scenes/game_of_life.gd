@@ -1,5 +1,7 @@
 extends Node3D
 
+signal add_pop
+
 var size = Vector2(100, 100)
 var grid_size = 100
 
@@ -33,6 +35,10 @@ func find_alive_neighbours(y: int, x: int, min_range: int, max_range: int):
 	if number_of_alive_neighbours < 0:
 		number_of_alive_neighbours = 0
 	return number_of_alive_neighbours
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("game_of_life_scene"):
+		get_tree().change_scene_to_file("res://scenes/selector_scenes.tscn")
 
 func _ready() -> void:
 	camera.position = Vector3(grid_size * 0.5, grid_size * 0.8, grid_size * 1.2)
@@ -87,6 +93,7 @@ func _on_timer_timeout() -> void:
 			var adult = find_alive_neighbours(y, x, -2, 3)
 			if adult >= 18:
 				## Spawn creature (matteo)
+				add_pop.emit()
 				var creature_instance = creature.duplicate()
 				add_child(creature_instance)
 				creature_instance.position = Vector3(x * 1.1, 0, y * 1.1)
