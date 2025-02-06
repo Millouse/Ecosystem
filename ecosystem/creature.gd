@@ -1,11 +1,19 @@
 extends RigidBody3D
+class_name Creature
+
+@export var tree: Node
+@export var base: Node
 
 var jump_delay: float = 1.5
 var jump_target: Vector3 = Vector3(0., 0., 0.)
 var jump_timer: Timer
 
-var jump_strength: float = 5.0  # Adjust this value for jump force
-var max_jump_distance: float = 1.0  # Limit for horizontal movement per jump
+var num_fruit: int
+var want_stock: bool = false
+var want_eat: bool = true
+
+var jump_strength: float = 3.
+var max_jump_distance: float = 0.5
 
 var raycast: RayCast3D  # To check if the rigid body is on the ground
 
@@ -23,6 +31,8 @@ func _ready() -> void:
 	jump_timer.autostart = true
 	jump_timer.timeout.connect(move)
 	add_child(jump_timer)
+	
+	jump_target = tree.position
 
 func move() -> void:		
 	var to_target = jump_target - global_transform.origin
@@ -31,7 +41,14 @@ func move() -> void:
 	# If already close to the target, stop jumping
 	if distance < max_jump_distance:
 		print("Reached target")
-		jump_timer.stop()
+		if (want_eat):
+			want_eat = false
+			want_stock = true
+			jump_target = base.position
+		else:
+			want_eat = true
+			want_stock = false
+			jump_target = tree.position
 		return
 	
 	# Calculate direction to target (horizontal component only)
@@ -54,10 +71,12 @@ func move() -> void:
 func _on_body_entered(body: Node) -> void:
 	if (body.name == "Ground"):
 		print("Stopping")
-		# Stop horizontal movement when grounded to prevent sliding
-		var velocity = linear_velocity
-		velocity.x = 0
-		velocity.y = 0
-		velocity.z = 0
-		linear_velocity = velocity
-		print(angular_velocity)
+		# Stop movement when grounded to prevent sliding
+		linear_velocity.x = 0
+		linear_velocity.y = 0
+		linear_velocity.z = 0
+		
+		angular_velocity.x = 0
+		angular_velocity.y = 0
+		angular_velocity.z = 0
+		

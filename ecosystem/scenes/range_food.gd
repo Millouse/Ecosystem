@@ -16,15 +16,15 @@ func _process(delta: float) -> void:
 		timer = 0
 	pass
 
-
 func _on_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D :
-		if body.want_eat:
-			body.num_fruit += num_fruit
+	if body is RigidBody3D :
+		var creature = body as Creature
+		if creature.want_eat:
+			creature.num_fruit += num_fruit
 			num_fruit = 0
-			body.want_eat = false
-			body.want_stock = true
-			print("fruit de la creature",body.num_fruit)
+			creature.want_eat = false
+			creature.want_stock = true
+			print("fruit de la creature",creature.num_fruit)
 			print("fruit de l'arbre", num_fruit)
 		pass
 		
