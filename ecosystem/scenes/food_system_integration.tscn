@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cs8r32a31k3ml"]
+[gd_scene load_steps=12 format=3 uid="uid://cs8r32a31k3ml"]
 
+[ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="1_csct4"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_7mob5"]
 [ext_resource type="Script" path="res://scenes/range_food.gd" id="2_qsiei"]
 [ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_4w8iu"]
@@ -20,6 +21,11 @@ size = Vector3(1.00723, 1.00415, 1.01071)
 [sub_resource type="CylinderMesh" id="CylinderMesh_ftkk8"]
 
 [node name="FoodSystem" type="Node3D"]
+
+[node name="AlgogenManager" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("1_csct4")]
+creature_scene = ExtResource("2_7mob5")
+tree = NodePath("../Tree")
+base = NodePath("../Nid")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(5.6653, 0, 0, 0, 0.335891, 0, 0, 0, 4.73923, 0, 0, -0.225978)
