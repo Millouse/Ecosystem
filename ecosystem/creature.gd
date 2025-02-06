@@ -19,12 +19,15 @@ var raycast: RayCast3D  # To check if the rigid body is on the ground
 
 # Genes for the object
 var genes: Dictionary = {
-	"color" = Color(randf(), randf(), randf()),
-	"attention_span" = randf(),
-	"speed" = randf(),
+	"color" = Color(1.0, 1.0, 1.0),
+	"stupidity" = 0.0,
+	"speed" = 1.0,
+	"health" = 1,
+	"hunger" = 1,
 }
 
 func _ready() -> void:
+	genes_init()
 	jump_target = Vector3(-4., 0., -4.)  # Set the target position
 	jump_timer = Timer.new()
 	jump_timer.wait_time = jump_delay
@@ -33,6 +36,17 @@ func _ready() -> void:
 	add_child(jump_timer)
 	
 	jump_target = tree.position
+
+func genes_init():
+	var unique_seed = get_instance_id()  # Unique seed for each creature
+	seed(unique_seed)  # Set the random seed for this creature
+	
+	genes["color"] = Color(randf(), randf(), randf())
+	genes["stupidity"] = randf()
+	genes["speed"] = randf()
+	genes["health"] = randi_range(1, 10)
+	genes["hunger"] = randi_range(0, 2)
+
 
 func move() -> void:		
 	var to_target = jump_target - global_transform.origin
@@ -59,9 +73,14 @@ func move() -> void:
 		jump_direction *= distance  # Small final jump
 	else:
 		jump_direction *= max_jump_distance  # Limit distance moved in one jump
-
+	
 	# Add a consistent upward impulse for the jump
 	var impulse = Vector3(jump_direction.x, jump_strength, jump_direction.z)
+	var deviation_strength = genes["stupidity"] * 0.5  # Scale the deviation by stupidity
+	var deviation_x = randf_range(-deviation_strength, deviation_strength)
+	var deviation_z = randf_range(-deviation_strength, deviation_strength)
+	impulse.x += deviation_x
+	impulse.z += deviation_z
 	
 	# Apply the impulse to the RigidBody3D
 	apply_impulse(impulse)
