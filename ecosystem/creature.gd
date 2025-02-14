@@ -1,12 +1,22 @@
 extends RigidBody3D
 class_name Creature
 
+enum Objective {
+	TO_BASE,
+	TO_FOOD,
+	SLACK,
+	ATTACK,
+	FLEE
+}
+
 @export var tree: Node
 @export var base: Node
 
 var jump_delay: float = 1.5
 var jump_target: Vector3 = Vector3(0., 0., 0.)
-var jump_timer: Timer
+@onready var jump_timer: Timer = %JumpTimer
+
+var current_objective: Objective
 
 var num_fruit: int
 var want_stock: bool = false
@@ -19,9 +29,11 @@ var raycast: RayCast3D  # To check if the rigid body is on the ground
 
 # Genes for the object
 var genes: Dictionary = {
-	"color" = Color(1.0, 1.0, 1.0),
+	"color" = Color(randf(), randf(), randf()),
 	"stupidity" = 0.0,
-	"speed" = 1.0,
+	"speed" = randf(),
+	"agression" = randf(),
+	"slacking" = randf(),
 	"health" = 1,
 	"hunger" = 1,
 }
@@ -29,11 +41,8 @@ var genes: Dictionary = {
 func _ready() -> void:
 	genes_init()
 	jump_target = Vector3(-4., 0., -4.)  # Set the target position
-	jump_timer = Timer.new()
 	jump_timer.wait_time = jump_delay
-	jump_timer.autostart = true
 	jump_timer.timeout.connect(move)
-	add_child(jump_timer)
 	
 	jump_target = tree.position
 
@@ -87,15 +96,23 @@ func move() -> void:
 
 	print("Jumping towards", jump_target)
 
+func choose_new_objective() -> void:
+	var roll: float = randf()
+	if (roll < genes["slacking"]):
+		current_objective = Objective.SLACK
+	else:
+		if (want_eat):
+			current_objective = Objective.TO_FOOD
+			jump_target = tree.position
+		elif (want_stock):
+			current_objective = Objective.TO_BASE
+			jump_target = base.position
+			
+	print("New objective : " + str(current_objective))
+
 func _on_body_entered(body: Node) -> void:
 	if (body.name == "Ground"):
 		print("Stopping")
 		# Stop movement when grounded to prevent sliding
-		linear_velocity.x = 0
-		linear_velocity.y = 0
-		linear_velocity.z = 0
-		
-		angular_velocity.x = 0
-		angular_velocity.y = 0
-		angular_velocity.z = 0
-		
+		linear_velocity = Vector3.ZERO
+		angular_velocity = Vector3.ZERO
