@@ -27,6 +27,11 @@ shape = SubResource("SphereShape3D_ger75")
 unique_name_in_owner = true
 autostart = true
 
+[node name="SlackTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 5.0
+one_shot = true
+
 [node name="AgressionArea" type="Area3D" parent="."]
 
 [node name="AgressionCollision" type="CollisionShape3D" parent="AgressionArea"]
