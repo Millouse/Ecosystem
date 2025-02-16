@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dxft0fnb4bc18"]
+[gd_scene load_steps=20 format=3 uid="uid://dxft0fnb4bc18"]
 
 [ext_resource type="Shader" path="res://node_3d.gdshader" id="1_8hhu8"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_dvvsb"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://c5f5n1cq16wkl" path="res://dirt/Ground037_2K-JPG_NormalGL.jpg" id="8_u7w1c"]
 [ext_resource type="Texture2D" uid="uid://ga3ap48rmpsp" path="res://gravel/Gravel041_2K-JPG_NormalGL.jpg" id="9_4aglk"]
 [ext_resource type="Texture2D" uid="uid://bympj4kxe3onk" path="res://rocks/Ground022_2K-JPG_NormalGL.jpg" id="10_y0m4t"]
+[ext_resource type="PackedScene" uid="uid://di1twu8jdvmlj" path="res://attractor.glb" id="11_trse2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_41ghe"]
 render_priority = 0
@@ -203,3 +204,12 @@ mesh = SubResource("BoxMesh_oosjw")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(20.2677, 0, 0, 0, 20.2677, 0, 0, 0, 30.1922, 157.919, -12.0248, 63.537)
 mesh = SubResource("BoxMesh_oosjw")
+
+[node name="attractor" parent="." instance=ExtResource("11_trse2")]
+transform = Transform3D(5.81262, -4.45743, 0, 8.71236, 2.97386, 0, 0, 0, 7.24341, 144.748, 48.6642, 74.1293)
+
+[node name="attractor2" parent="." instance=ExtResource("11_trse2")]
+transform = Transform3D(-0.142987, 0.10965, -11.0839, 3.4883, 8.00347, 0.123156, 15.6437, -1.78365, -0.128771, 94.7543, 46.2564, 142.893)
+
+[node name="attractor3" parent="." instance=ExtResource("11_trse2")]
+transform = Transform3D(-0.0762285, 0.0584561, -5.90901, -8.46197, -0.60736, 0.0412346, -1.18618, 4.32904, 0.0855759, 86.2283, 59.0037, 53.8562)
