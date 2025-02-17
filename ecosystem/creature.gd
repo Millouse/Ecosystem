@@ -31,6 +31,7 @@ var raycast: RayCast3D  # To check if the rigid body is on the ground
 
 @export var team: int # Export for testing purposes
 var enemy: RigidBody3D = null
+var kill_count: int = 0
 
 # Genes for the object
 var genes: Dictionary = {
@@ -68,14 +69,18 @@ func genes_init():
 
 
 func move() -> void:
-	if (current_objective == Objective.ATTACK and enemy != null):
-		jump_target = enemy.position # Refresh enemy position since he probably moved
-		
+	if current_objective == Objective.ATTACK:
+		if enemy == null or enemy.genes["health"] <= 0:
+			choose_new_objective()
+			return
+		else:
+			jump_target = enemy.position
+
 	var to_target = jump_target - global_transform.origin
 	var distance = to_target.length()
-	
-	# If already close to the target, stop jumping
-	if (distance < max_jump_distance and current_objective != Objective.SLACK):
+
+	# Only switch objective if not attacking/slacking and close to target
+	if (distance < max_jump_distance and current_objective not in [Objective.SLACK, Objective.ATTACK]):
 		choose_new_objective()
 		return
 	
@@ -102,6 +107,9 @@ func move() -> void:
 	#print("Jumping towards", jump_target)
 
 func choose_new_objective() -> void:
+	if (current_objective == Objective.ATTACK):
+		enemy = null # Reset enemy reference
+	
 	var roll: float = randf()
 	if (roll < genes["slacking"]):
 		current_objective = Objective.SLACK
@@ -138,12 +146,14 @@ func _on_body_entered(body: Node) -> void:
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
 	if (body as Creature):
-		print("Creature on creature action")
 		var enemy_creature = body as Creature
 		if (randf() < 0.7): # 70% chance of dealing damage - need to do better later
+			print("Dealing damage !")
 			enemy_creature.genes["health"] -= 1
-			print("Damage !")
-
+			if (enemy_creature.genes["health"] <= 0):
+				print("Killed !")
+				kill_count += 1
+				choose_new_objective()
 
 func _on_agression_area_body_entered(body: Node3D) -> void:
 	print("Agression body entered" + body.name)
