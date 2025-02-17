@@ -24,6 +24,7 @@ size = Vector3(20, 1, 20)
 [node name="FoodSystem" type="Node3D"]
 
 [node name="AlgogenManager" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("1_csct4")]
+process_mode = 4
 creature_scene = ExtResource("2_7mob5")
 tree = NodePath("../Tree")
 base = NodePath("../Nid")
@@ -77,6 +78,12 @@ mesh = SubResource("CylinderMesh_ftkk8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403819, 0.405548, 0.909711)
 tree = NodePath("../Tree")
 base = NodePath("../Nid")
+
+[node name="Creature2" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("2_7mob5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211689, 0.405548, 0.909711)
+tree = NodePath("../Tree")
+base = NodePath("../Nid")
+team = 1
 
 [node name="Nid" type="Area3D" parent="."]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825722, -0.119598, -1.29052)

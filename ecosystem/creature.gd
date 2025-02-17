@@ -1,5 +1,4 @@
-extends RigidBody3D
-class_name Creature
+class_name Creature extends RigidBody3D
 
 enum Objective {
 	TO_BASE,
@@ -30,6 +29,9 @@ var slack_max_distance: float = 3.0 # When slacking, creature goes somewhere ran
 
 var raycast: RayCast3D  # To check if the rigid body is on the ground
 
+@export var team: int # Export for testing purposes
+var enemy: RigidBody3D = null
+
 # Genes for the object
 var genes: Dictionary = {
 	"color" = Color(randf(), randf(), randf()),
@@ -50,6 +52,10 @@ func _ready() -> void:
 	
 	slack_timer.timeout.connect(_on_slack_timer_timeout)
 
+func _process(delta: float) -> void:
+	if (genes["health"] <= 0):
+		queue_free() # Just remove the entity for now
+
 func genes_init():
 	var unique_seed = get_instance_id()  # Unique seed for each creature
 	seed(unique_seed)  # Set the random seed for this creature
@@ -57,16 +63,19 @@ func genes_init():
 	genes["color"] = Color(randf(), randf(), randf())
 	genes["stupidity"] = randf()
 	genes["speed"] = randf()
-	genes["health"] = randi_range(1, 10)
+	genes["health"] = 1 # randi_range(1, 10) # Set to 1 for test
 	genes["hunger"] = randi_range(0, 2)
 
 
-func move() -> void:		
+func move() -> void:
+	if (current_objective == Objective.ATTACK and enemy != null):
+		jump_target = enemy.position # Refresh enemy position since he probably moved
+		
 	var to_target = jump_target - global_transform.origin
 	var distance = to_target.length()
 	
 	# If already close to the target, stop jumping
-	if distance < max_jump_distance and current_objective != Objective.SLACK:
+	if (distance < max_jump_distance and current_objective != Objective.SLACK):
 		choose_new_objective()
 		return
 	
@@ -74,7 +83,7 @@ func move() -> void:
 	var jump_direction = Vector3(to_target.x, 0, to_target.z).normalized()
 
 	# Scale the horizontal movement so it doesn't exceed max_jump_distance
-	if distance < max_jump_distance:
+	if (distance < max_jump_distance):
 		jump_direction *= distance  # Small final jump
 	else:
 		jump_direction *= max_jump_distance  # Limit distance moved in one jump
@@ -110,7 +119,7 @@ func choose_new_objective() -> void:
 			want_stock = false
 			jump_target = base.position
 			
-	print("New objective : " + str(current_objective))
+	#print("New objective : " + str(current_objective))
 	
 func generate_slack_target() -> Vector3:
 	var current_pos = global_transform.origin
@@ -128,3 +137,30 @@ func _on_body_entered(body: Node) -> void:
 		# Stop movement when grounded to prevent sliding
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
+	if (body as Creature):
+		print("Creature on creature action")
+		var enemy_creature = body as Creature
+		if (randf() < 0.7): # 70% chance of dealing damage - need to do better later
+			enemy_creature.genes["health"] -= 1
+			print("Damage !")
+
+
+func _on_agression_area_body_entered(body: Node3D) -> void:
+	print("Agression body entered" + body.name)
+	if body is RigidBody3D:
+		var creature = body as Creature
+		if (creature.team != team):
+			var roll: float = randf()
+			if (roll < genes["agression"]):
+				print("Attacking")
+				current_objective = Objective.ATTACK
+				jump_target = creature.position
+				enemy = creature
+			else:
+				print("Fleeing")
+				current_objective = Objective.FLEE
+				var current_pos = global_transform.origin
+				var random_angle = randf_range(0, 2 * PI)
+				var distance = 5
+				var offset = Vector3(cos(random_angle) * distance, 0, sin(random_angle) * distance)
+				
