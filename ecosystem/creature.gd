@@ -11,7 +11,6 @@ enum Objective {
 @export var tree: Node
 @export var base: Node
 
-var jump_delay: float = 1.5
 var jump_target: Vector3 = Vector3(0., 0., 0.)
 @onready var jump_timer: Timer = %JumpTimer
 @onready var slack_timer: Timer = %SlackTimer
@@ -37,8 +36,8 @@ var kill_count: int = 0
 var genes: Dictionary = {
 	"color" = Color(randf(), randf(), randf()),
 	"stupidity" = 0.0, # Adds random deviation to jump
-	"speed" = randf(), # TODO : Not implemented
-	"agression" = randf(), # To know if creatures attacks or flees when meeting another
+	"speed" = 1.0 + randf(), # Minimum of 1 second
+	"agression" = randf(), # To know if creatures attacks or flees when meeting another TODO : change radius aswell
 	"slacking" = randf(), # Chance to do nothing and go take a nap
 	"health" = 1,
 	"hunger" = 1,
@@ -48,12 +47,12 @@ func _ready() -> void:
 	genes_init()
 	choose_new_objective()
 	
-	jump_timer.wait_time = jump_delay
+	jump_timer.wait_time = genes["speed"]
 	jump_timer.timeout.connect(move)
 	
 	slack_timer.timeout.connect(_on_slack_timer_timeout)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if (genes["health"] <= 0):
 		queue_free() # Just remove the entity for now
 
@@ -63,7 +62,7 @@ func genes_init():
 	
 	genes["color"] = Color(randf(), randf(), randf())
 	genes["stupidity"] = randf()
-	genes["speed"] = randf()
+	genes["speed"] = 1.0 + randf()
 	genes["health"] = 1 # randi_range(1, 10) # Set to 1 for test
 	genes["hunger"] = randi_range(0, 2)
 
@@ -173,4 +172,5 @@ func _on_agression_area_body_entered(body: Node3D) -> void:
 				var random_angle = randf_range(0, 2 * PI)
 				var distance = 5
 				var offset = Vector3(cos(random_angle) * distance, 0, sin(random_angle) * distance)
+				jump_target = current_pos + offset
 				
