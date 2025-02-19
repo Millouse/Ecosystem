@@ -1,28 +1,39 @@
-[gd_scene load_steps=5 format=3 uid="uid://d3tfyw8h8qx24"]
+[gd_scene load_steps=8 format=3 uid="uid://d3tfyw8h8qx24"]
 
 [ext_resource type="Script" path="res://creature.gd" id="1_y37ah"]
+[ext_resource type="PackedScene" uid="uid://bq0y167d7xl0t" path="res://assets/meshes/Slime.glb" id="2_gg4id"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_mxris"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3acbo"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ger75"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4b2t7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r7x4h"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ugdfr"]
+radius = 0.124765
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_h3543"]
 
 [node name="Creature" type="RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 2
 collision_mask = 3
+axis_lock_angular_x = true
+axis_lock_angular_z = true
 contact_monitor = true
 max_contacts_reported = 3
 script = ExtResource("1_y37ah")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
-mesh = SubResource("SphereMesh_mxris")
+[node name="Slime" parent="." instance=ExtResource("2_gg4id")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="Cube" parent="Slime/Armature/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_3acbo")
+surface_material_override/1 = SubResource("StandardMaterial3D_4b2t7")
+surface_material_override/2 = SubResource("StandardMaterial3D_r7x4h")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
-shape = SubResource("SphereShape3D_ger75")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127454, 0)
+shape = SubResource("SphereShape3D_ugdfr")
 
 [node name="JumpTimer" type="Timer" parent="."]
 unique_name_in_owner = true
@@ -42,3 +53,5 @@ shape = SubResource("SphereShape3D_h3543")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="AgressionArea" to="." method="_on_agression_area_body_entered"]
+
+[editable path="Slime"]

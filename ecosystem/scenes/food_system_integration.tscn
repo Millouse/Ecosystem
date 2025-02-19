@@ -75,7 +75,7 @@ shape = SubResource("CylinderShape3D_invbj")
 mesh = SubResource("CylinderMesh_ftkk8")
 
 [node name="Creature" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("2_7mob5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403819, 0.405548, 0.909711)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.947781, 1.43368, 0.909711)
 tree = NodePath("../Tree")
 base = NodePath("../Nid")
 
