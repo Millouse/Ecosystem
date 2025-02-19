@@ -36,7 +36,7 @@ func find_alive_neighbours(y: int, x: int, min_range: int, max_range: int):
 		number_of_alive_neighbours = 0
 	return number_of_alive_neighbours
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("game_of_life_scene"):
 		get_tree().change_scene_to_file("res://scenes/selector_scenes.tscn")
 
