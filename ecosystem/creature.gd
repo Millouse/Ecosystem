@@ -32,9 +32,11 @@ var raycast: RayCast3D  # To check if the rigid body is on the ground
 var enemy: RigidBody3D = null
 var kill_count: int = 0
 
+var fitness # TODO : Figure out what fitness will be. Maybe stocked food / kills ?
+
 # Genes for the object
 var genes: Dictionary = {
-	"color" = Color(randf(), randf(), randf()),
+	"color" = Color(randf(), randf(), randf()), # TODO : Actually use color gene
 	"stupidity" = 0.0, # Adds random deviation to jump
 	"speed" = 1.0 + randf(), # Minimum of 1 second
 	"agression" = randf(), # To know if creatures attacks or flees when meeting another TODO : change radius aswell
@@ -44,7 +46,7 @@ var genes: Dictionary = {
 }
 
 func _ready() -> void:
-	genes_init()
+	genes_init() # WARNING : That may fuck up crossover / mutation !
 	choose_new_objective()
 	
 	jump_timer.wait_time = genes["speed"]
@@ -65,7 +67,6 @@ func genes_init():
 	genes["speed"] = 1.0 + randf()
 	genes["health"] = 1 # randi_range(1, 10) # Set to 1 for test
 	genes["hunger"] = randi_range(0, 2)
-
 
 func move() -> void:
 	if current_objective == Objective.ATTACK:
