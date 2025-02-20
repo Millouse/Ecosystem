@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bebkymtrpgm78"]
+[gd_scene load_steps=15 format=3 uid="uid://bebkymtrpgm78"]
 
-[ext_resource type="Script" path="res://Creature_food.gd" id="2_3a20a"]
+[ext_resource type="Script" path="res://scenes/Creature_food.gd" id="2_3a20a"]
 [ext_resource type="Script" path="res://scenes/range_food.gd" id="2_ljvb1"]
 [ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_3cws1"]
-[ext_resource type="Script" path="res://detect_creatures.gd" id="5_voouj"]
+[ext_resource type="Script" path="res://scenes/select_creature.gd" id="4_548fj"]
+[ext_resource type="Script" path="res://scenes/detect_creatures.gd" id="5_voouj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(1.00723, 1.00415, 1.01071)
@@ -93,6 +94,9 @@ script = ExtResource("3_3cws1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Nid"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_pytgi")
+
+[node name="SelectCreature" type="Node" parent="."]
+script = ExtResource("4_548fj")
 
 [node name="DetectCreatures" type="RayCast3D" parent="."]
 script = ExtResource("5_voouj")

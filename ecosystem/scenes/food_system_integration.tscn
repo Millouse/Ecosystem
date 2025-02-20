@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://bebkymtrpgm78"]
+[gd_scene load_steps=11 format=3 uid="uid://cs8r32a31k3ml"]
 
-[ext_resource type="Script" path="res://Creature_food.gd" id="2_3a20a"]
-[ext_resource type="Script" path="res://scenes/range_food.gd" id="2_ljvb1"]
-[ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_3cws1"]
-[ext_resource type="Script" path="res://detect_creatures.gd" id="5_voouj"]
+[ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_7mob5"]
+[ext_resource type="Script" path="res://scenes/range_food.gd" id="2_qsiei"]
+[ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_4w8iu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(1.00723, 1.00415, 1.01071)
@@ -13,10 +12,6 @@ size = Vector3(1.00723, 1.00415, 1.01071)
 [sub_resource type="BoxShape3D" id="BoxShape3D_bupvb"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_dvcg0"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5h7m0"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_2mey1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pytgi"]
 
@@ -46,20 +41,6 @@ shape = SubResource("BoxShape3D_bupvb")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Tree"]
 mesh = SubResource("BoxMesh_dvcg0")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40566, 0.193449, 0.0061717)
-collision_layer = 2
-script = ExtResource("2_3a20a")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-transform = Transform3D(0.115368, 0, 0, 0, 0.139339, 0, 0, 0, 0.112637, -0.063622, 0.0923806, 0.0296218)
-shape = SubResource("CapsuleShape3D_5h7m0")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
-transform = Transform3D(0.115368, 0, 0, 0, 0.139339, 0, 0, 0, 0.112637, -0.0641387, 0.0865859, 0.0317404)
-mesh = SubResource("CapsuleMesh_2mey1")
-skeleton = NodePath("")
-
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.402667, 0.915347, 0, -0.915347, 0.402667, -1.40105, 1.79049, 1.38196)
 fov = 90.0
@@ -70,7 +51,7 @@ transform = Transform3D(1, 0, 0, 0, 0.754274, 0.656559, 0, -0.656559, 0.754274, 
 [node name="RangeFood" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00318, 0.1, 1.43611)
 collision_mask = 2
-script = ExtResource("2_ljvb1")
+script = ExtResource("2_qsiei")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RangeFood"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
@@ -85,17 +66,19 @@ shape = SubResource("CylinderShape3D_invbj")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("CylinderMesh_ftkk8")
 
+[node name="Creature" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("2_7mob5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403819, 0.405548, 0.909711)
+tree = NodePath("../Tree")
+base = NodePath("../Nid")
+
 [node name="Nid" type="Area3D" parent="."]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825722, -0.119598, -1.29052)
 collision_mask = 2
-script = ExtResource("3_3cws1")
+script = ExtResource("3_4w8iu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Nid"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_pytgi")
-
-[node name="DetectCreatures" type="RayCast3D" parent="."]
-script = ExtResource("5_voouj")
 
 [connection signal="body_entered" from="RangeFood" to="RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="Nid" to="Nid" method="_on_body_entered"]

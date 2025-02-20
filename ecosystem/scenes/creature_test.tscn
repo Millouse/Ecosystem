@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8x0psu6rpng6"]
+
+[ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="1_bhrlh"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_px01o"]
+size = Vector2(10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a8iw6"]
+albedo_color = Color(0.362829, 0.362829, 0.362829, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cd0ua"]
+size = Vector3(10, 1, 10)
+
+[node name="CreatureTest" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_px01o")
+surface_material_override/0 = SubResource("StandardMaterial3D_a8iw6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_cd0ua")
+
+[node name="Creature" parent="." instance=ExtResource("1_bhrlh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.00353, 0.5, 4.06608)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.39294, 6.78633)
