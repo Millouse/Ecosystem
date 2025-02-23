@@ -1,8 +1,8 @@
 [gd_scene load_steps=18 format=4 uid="uid://d3tfyw8h8qx24"]
 
-[ext_resource type="Script" path="res://creature.gd" id="1_y37ah"]
-[ext_resource type="Texture2D" uid="uid://dj32terokd4yx" path="res://assets/textures/SlimeTooth_Texture.png" id="3_5dg6s"]
-[ext_resource type="Texture2D" uid="uid://dqttisxoixi4f" path="res://assets/textures/SlimeBody_Texture_Grey.png" id="3_nhitn"]
+[ext_resource type="Script" path="res://scripts/creature.gd" id="1_y37ah"]
+[ext_resource type="Texture2D" uid="uid://dj32terokd4yx" path="res://assets/textures/slime/SlimeTooth_Texture.png" id="3_5dg6s"]
+[ext_resource type="Texture2D" uid="uid://dqttisxoixi4f" path="res://assets/textures/slime/SlimeBody_Texture_Grey.png" id="3_nhitn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_777ge"]
 resource_name = "SlimeBody"

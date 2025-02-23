@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://dfkq4mbjcejtt"]
 
-[ext_resource type="Script" path="res://camera_spectate.gd" id="1_kxv2h"]
-[ext_resource type="Script" path="res://scenes/range_food.gd" id="1_u2tnt"]
+[ext_resource type="Script" path="res://scripts/camera_spectate.gd" id="1_kxv2h"]
+[ext_resource type="Script" path="res://scripts/range_food.gd" id="1_u2tnt"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_ooqnq"]
-[ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_fivtd"]
-[ext_resource type="Script" path="res://detect_creatures.gd" id="4_ndml1"]
+[ext_resource type="Script" path="res://scripts/stock_food.gd" id="3_fivtd"]
+[ext_resource type="Script" path="res://scripts/detect_creatures.gd" id="4_ndml1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(1.00723, 1.00415, 1.01071)

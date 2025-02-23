@@ -1,9 +1,9 @@
 [gd_scene load_steps=14 format=3 uid="uid://bebkymtrpgm78"]
 
-[ext_resource type="Script" path="res://Creature_food.gd" id="2_3a20a"]
-[ext_resource type="Script" path="res://scenes/range_food.gd" id="2_ljvb1"]
-[ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_3cws1"]
-[ext_resource type="Script" path="res://detect_creatures.gd" id="5_voouj"]
+[ext_resource type="Script" path="res://scripts/Creature_food.gd" id="2_3a20a"]
+[ext_resource type="Script" path="res://scripts/range_food.gd" id="2_ljvb1"]
+[ext_resource type="Script" path="res://scripts/stock_food.gd" id="3_3cws1"]
+[ext_resource type="Script" path="res://scripts/detect_creatures.gd" id="5_voouj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(1.00723, 1.00415, 1.01071)

@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="1_csct4"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_7mob5"]
-[ext_resource type="Script" path="res://scenes/range_food.gd" id="2_qsiei"]
-[ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_4w8iu"]
+[ext_resource type="Script" path="res://scripts/range_food.gd" id="2_qsiei"]
+[ext_resource type="Script" path="res://scripts/stock_food.gd" id="3_4w8iu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(20, 1.004, 20)
