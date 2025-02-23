@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://r2kn8hde71lk"]
+
+[ext_resource type="Script" path="res://scripts/camera_spectate.gd" id="1_0t81e"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+script = ExtResource("1_0t81e")
