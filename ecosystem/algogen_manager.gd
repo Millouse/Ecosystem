@@ -6,6 +6,7 @@ enum SelectionMethod { TOURNAMENT, ROULETTE }
 
 # Population settings
 const POPULATION_SIZE = 20
+const GENERATION_DURATION = 150
 
 # Scene references
 @export var creature_scene: PackedScene
@@ -34,7 +35,7 @@ func create_initial_population():
 		spawn_creature()
 	print("Generation 1 created!")
 
-func spawn_creature
+func spawn_creature():
 	var creature: Creature = creature_scene.instantiate()
 	creature.position = spawn_point
 	creature.tree = tree
