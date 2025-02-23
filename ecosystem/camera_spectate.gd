@@ -5,17 +5,19 @@ var target
 var Lastposition : Vector3 = Vector3.ZERO
 
 
-var distance = 3.0
-var hauteur = 2.0
+var distance = 1.0
+var hauteur = 1.0
 
-var rotation_speed = 0.1
+var rotation_speed = 0.05
 var horizontal_angle = 0.0
 
 var is_follow : bool
+var window
 
 func _ready() -> void:
 	is_follow = false
 	Lastposition = global_transform.origin
+	window = %PopupWindow
 	print(target)
 
 func set_target(_target : Node) -> void:
@@ -46,12 +48,15 @@ func follow_target()->void:
 		hauteur,
 		distance * sin(horizontal_angle)
 	)
-	if target != null:
-		global_transform.origin = target.global_transform.origin + camera_position
-		look_at(target.global_transform.origin, Vector3.UP)
+	global_transform.origin = target.global_transform.origin + camera_position
+	look_at(target.global_transform.origin, Vector3.UP)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(delta: float) -> void:
 	if is_follow:
 		if target != null:
+			window.show()
 			follow_target()
+	else:
+		window.hide()
 	pass

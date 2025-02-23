@@ -87,5 +87,33 @@ shape = SubResource("BoxShape3D_pytgi")
 [node name="DetectCreatures" type="RayCast3D" parent="."]
 script = ExtResource("4_ndml1")
 
+[node name="GenWindow" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -127.0
+offset_right = 15.0
+offset_bottom = -127.0
+grow_vertical = 2
+scale = Vector2(3.62788e+07, 6.95467)
+size_flags_horizontal = 0
+
+[node name="PopupWindow" type="PopupPanel" parent="GenWindow"]
+unique_name_in_owner = true
+position = Vector2i(45, 195)
+size = Vector2i(200, 300)
+visible = true
+
+[node name="Label" type="Label" parent="GenWindow/PopupWindow"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 196.0
+offset_bottom = 296.0
+text = "Genome"
+horizontal_alignment = 1
+
 [connection signal="body_entered" from="RangeFood" to="RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="Nid" to="Nid" method="_on_body_entered"]
