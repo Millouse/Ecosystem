@@ -15,8 +15,10 @@ run/main_scene="res://scenes/food_system.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
-[dotnet]
+[editor_plugins]
 
+
+enabled=PackedStringArray("res://addons/zylann.hterrain/plugin.cfg")
 project/assembly_name="Ecosystem"
 
 [input]
