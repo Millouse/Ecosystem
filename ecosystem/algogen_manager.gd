@@ -6,7 +6,6 @@ enum SelectionMethod { TOURNAMENT, ROULETTE }
 
 # Population settings
 const POPULATION_SIZE = 20
-const GENERATION_DURATION = 150.0  # Seconds to wait before making new generation
 
 # Scene references
 @export var creature_scene: PackedScene
@@ -35,7 +34,7 @@ func create_initial_population():
 		spawn_creature()
 	print("Generation 1 created!")
 
-func spawn_creature():
+func spawn_creature
 	var creature: Creature = creature_scene.instantiate()
 	creature.position = spawn_point
 	creature.tree = tree
@@ -123,12 +122,14 @@ func crossover(genes1, genes2):
 	# Randomly select genes from either parent
 	# TODO : Figure out how the crossover can be made without harcoding, same for mutate
 	new_genes.color = genes1.color if randf() < 0.5 else genes2.color
+
 	new_genes.stupidity = genes1.attention_span if randf() < 0.5 else genes2.attention_span
 	new_genes.speed = genes1.speed if randf() < 0.5 else genes2.speed
 	new_genes.agression = genes1.agression if randf() < 0.5 else genes2.agression
 	new_genes.slacking = genes1.slacking if randf() < 0.5 else genes2.slacking
 	new_genes.health = genes1.health if randf() < 0.5 else genes2.health
 	new_genes.hunger = genes1.hunger if randf() < 0.5 else genes2.hunger
+
 	return new_genes
 
 func mutate(genes):

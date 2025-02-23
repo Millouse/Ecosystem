@@ -1,3 +1,4 @@
+
 class_name Creature extends RigidBody3D
 
 enum Objective {
@@ -18,6 +19,7 @@ var jump_target: Vector3 = Vector3(0., 0., 0.)
 @onready var slime_mesh: MeshInstance3D = %Mesh
 
 var current_objective: Objective
+
 
 var num_fruit: int
 var want_stock: bool = false
@@ -181,4 +183,3 @@ func _on_agression_area_body_entered(body: Node3D) -> void:
 				var distance = 5
 				var offset = Vector3(cos(random_angle) * distance, 0, sin(random_angle) * distance)
 				jump_target = current_pos + offset
-				
