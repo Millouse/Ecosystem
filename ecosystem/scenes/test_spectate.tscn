@@ -1,0 +1,119 @@
+[gd_scene load_steps=13 format=3 uid="uid://dfkq4mbjcejtt"]
+
+[ext_resource type="Script" path="res://camera_spectate.gd" id="1_kxv2h"]
+[ext_resource type="Script" path="res://scenes/range_food.gd" id="1_u2tnt"]
+[ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_ooqnq"]
+[ext_resource type="Script" path="res://scenes/stock_food.gd" id="3_fivtd"]
+[ext_resource type="Script" path="res://detect_creatures.gd" id="4_ndml1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
+size = Vector3(1.00723, 1.00415, 1.01071)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pudpq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bupvb"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dvcg0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pytgi"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_invbj"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ftkk8"]
+
+[node name="FoodSystem" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(5.6653, 0, 0, 0, 0.335891, 0, 0, 0, 4.73923, 0, 0, -0.225978)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.20311, 0.0020752, -0.0103302)
+shape = SubResource("BoxShape3D_753pu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19712, 0.0262094, 0.00221831)
+mesh = SubResource("BoxMesh_pudpq")
+
+[node name="Tree" type="StaticBody3D" parent="."]
+transform = Transform3D(0.121967, 0, 0, 0, 1, 0, 0, 0, 0.142804, 1.00318, 0.684449, 1.43611)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Tree"]
+shape = SubResource("BoxShape3D_bupvb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Tree"]
+mesh = SubResource("BoxMesh_dvcg0")
+
+[node name="MainCamera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.402667, 0.915347, 0, -0.915347, 0.402667, -1.40105, 1.79049, 1.38196)
+fov = 90.0
+script = ExtResource("1_kxv2h")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.754274, 0.656559, 0, -0.656559, 0.754274, -1.07707, 3.09945, 3.49181)
+
+[node name="RangeFood" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00318, 0.1, 1.43611)
+collision_mask = 2
+script = ExtResource("1_u2tnt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RangeFood"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_pytgi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.2, 0, 0, 0, 0.5, -0.960966, 0, -1.37112)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("CylinderShape3D_invbj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("CylinderMesh_ftkk8")
+
+[node name="Creature" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("2_ooqnq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403819, 0.405548, 0.909711)
+tree = NodePath("../Tree")
+base = NodePath("../Nid")
+
+[node name="Nid" type="Area3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825722, -0.119598, -1.29052)
+collision_mask = 2
+script = ExtResource("3_fivtd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Nid"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_pytgi")
+
+[node name="DetectCreatures" type="RayCast3D" parent="."]
+script = ExtResource("4_ndml1")
+
+[node name="GenWindow" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -127.0
+offset_right = 15.0
+offset_bottom = -127.0
+grow_vertical = 2
+scale = Vector2(3.62788e+07, 6.95467)
+size_flags_horizontal = 0
+
+[node name="PopupWindow" type="PopupPanel" parent="GenWindow"]
+unique_name_in_owner = true
+position = Vector2i(45, 195)
+size = Vector2i(200, 300)
+visible = true
+
+[node name="Label" type="Label" parent="GenWindow/PopupWindow"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 196.0
+offset_bottom = 296.0
+text = "Genome"
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="RangeFood" to="RangeFood" method="_on_body_entered"]
+[connection signal="body_entered" from="Nid" to="Nid" method="_on_body_entered"]
