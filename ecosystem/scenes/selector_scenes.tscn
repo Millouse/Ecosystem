@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dro0lqpwl50p0"]
+
+[ext_resource type="Script" path="res://select_scene.gd" id="1_feuhq"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_svjju"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uex2k"]
+albedo_color = Color(1, 0.278431, 0.133333, 1)
+
+[node name="Node" type="Node"]
+script = ExtResource("1_feuhq")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.865017)
+mesh = SubResource("QuadMesh_svjju")
+surface_material_override/0 = SubResource("StandardMaterial3D_uex2k")
