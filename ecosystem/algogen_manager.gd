@@ -6,11 +6,12 @@ enum SelectionMethod { TOURNAMENT, ROULETTE }
 
 # Population settings
 const POPULATION_SIZE = 20
-const GENERATION_DURATION = 10.0  # Seconds to wait before making new generation
 
 # Scene references
 @export var creature_scene: PackedScene
-@export var spawn_point: Vector3 = Vector3(9, 2, 0)
+@export var spawn_point: Vector3
+@export var tree: Node
+@export var base: Node
 
 # Population tracking
 var current_population = []
@@ -33,10 +34,12 @@ func create_initial_population():
 		spawn_creature()
 	print("Generation 1 created!")
 
-func spawn_creature():
-	var creature = creature_scene.instantiate()
-	add_child(creature)
+func spawn_creature
+	var creature: Creature = creature_scene.instantiate()
 	creature.position = spawn_point
+	creature.tree = tree
+	creature.base = base
+	add_child(creature)
 	current_population.append(creature)
 
 func evaluate_and_evolve():
@@ -119,17 +122,31 @@ func crossover(genes1, genes2):
 	# Randomly select genes from either parent
 	# TODO : Figure out how the crossover can be made without harcoding, same for mutate
 	new_genes.color = genes1.color if randf() < 0.5 else genes2.color
-	new_genes.attention_span = genes1.attention_span if randf() < 0.5 else genes2.attention_span
+
+	new_genes.stupidity = genes1.attention_span if randf() < 0.5 else genes2.attention_span
 	new_genes.speed = genes1.speed if randf() < 0.5 else genes2.speed
+	new_genes.agression = genes1.agression if randf() < 0.5 else genes2.agression
+	new_genes.slacking = genes1.slacking if randf() < 0.5 else genes2.slacking
+	new_genes.health = genes1.health if randf() < 0.5 else genes2.health
+	new_genes.hunger = genes1.hunger if randf() < 0.5 else genes2.hunger
+
 	return new_genes
 
 func mutate(genes):
 	if randf() < 0.1:  # 10% mutation chance
-		genes.color += Color(randf(), randf(), randf())
+		genes.color += Color(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
 	if randf() < 0.1:
-		genes.attention_span += randf()
+		genes.attention_span += randf_range(-1.0, 1.0)
 	if randf() < 0.1:
-		genes.speed += randf()
+		genes.speed += randf_range(-1.0, 1.0)
+	if randf() < 0.1:
+		genes.agression += randf_range(-1.0, 1.0)
+	if randf() < 0.1:
+		genes.slacking += randf_range(-1.0, 1.0)
+	if randf() < 0.1:
+		genes.health += randi_range(-1, 1)
+	if randf() < 0.1:
+		genes.hunger += randi_range(-1, 1)
 
 func spawn_new_creature(genes = null):
 	var creature = creature_scene.instantiate()
@@ -138,4 +155,3 @@ func spawn_new_creature(genes = null):
 	if genes:
 		creature.genes = genes.duplicate()
 	return creature
-	
