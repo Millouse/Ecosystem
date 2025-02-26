@@ -15,11 +15,11 @@ enum Objective {
 var jump_target: Vector3 = Vector3(0., 0., 0.)
 @onready var jump_timer: Timer = %JumpTimer
 @onready var slack_timer: Timer = %SlackTimer
+@onready var flee_timer: Timer = %FleeTimer
 
 @onready var slime_mesh: MeshInstance3D = %Mesh
 
 var current_objective: Objective
-
 
 var num_fruit: int
 var want_stock: bool = false
@@ -54,13 +54,13 @@ func _ready() -> void:
 	var new_material := body_material.duplicate()
 	new_material.albedo_color = genes.color
 	slime_mesh.set_surface_override_material(0, new_material)
-	print("Choosing start objective")
 	choose_new_objective()
 	
 	jump_timer.wait_time = genes["speed"]
 	jump_timer.timeout.connect(move)
 	
 	slack_timer.timeout.connect(_on_slack_timer_timeout)
+	flee_timer.timeout.connect(_on_flee_timer_timeout)
 
 func _process(_delta: float) -> void:
 	if (genes["health"] <= 0):
@@ -87,12 +87,6 @@ func move() -> void:
 
 	var to_target = jump_target - global_transform.origin
 	var distance = to_target.length()
-
-	# Only switch objective if not attacking/slacking and close to target
-	#if (distance < max_jump_distance and current_objective not in [Objective.SLACK, Objective.ATTACK]):
-		#print("Choosing new objective because reached objective")
-		#choose_new_objective()
-		#return
 	
 	# Calculate direction to target (horizontal component only)
 	var jump_direction = Vector3(to_target.x, 0, to_target.z).normalized()
@@ -152,10 +146,13 @@ func generate_slack_target() -> Vector3:
 
 func _on_slack_timer_timeout():
 	choose_new_objective()
+	
+func _on_flee_timer_timeout():
+	choose_new_objective()
 
 func _on_body_entered(body: Node) -> void:
-	print("Body entered : " + body.name)
-	if (body.name == "Ground"):
+	#print("Body entered : " + body.name)
+	if (body.name == "Ground" or body.name == "HTerrain"):
 		#print("Stopping")
 		# Stop movement when grounded to prevent sliding
 		linear_velocity = Vector3.ZERO
@@ -190,3 +187,4 @@ func _on_agression_area_body_entered(body: Node3D) -> void:
 				var distance = 5
 				var offset = Vector3(cos(random_angle) * distance, 0, sin(random_angle) * distance)
 				jump_target = current_pos + offset
+				flee_timer.start()

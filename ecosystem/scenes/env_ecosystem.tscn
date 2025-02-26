@@ -274,11 +274,6 @@ transform = Transform3D(1, 0, 0, 0, 0.779415, 0.626509, 0, -0.626509, 0.779415, 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.185015, 0.982736, 0, -0.982736, 0.185015, 86.5228, 20.8075, 0)
 
-[node name="Creature" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("14_rh5r7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95.3186, 3.09063, 119.96)
-tree = NodePath("../low_poly_tree/RangeFood")
-base = NodePath("../AlgogenManager1/Nid")
-
 [connection signal="body_entered" from="low_poly_tree/RangeFood" to="low_poly_tree/RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="AlgogenManager1/Nid" to="AlgogenManager1/Nid" method="_on_body_entered"]
 [connection signal="body_entered" from="AlgogenManager2/Nid" to="AlgogenManager2/Nid" method="_on_body_entered"]

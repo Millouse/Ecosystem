@@ -37,11 +37,11 @@ func create_initial_population():
 
 func spawn_creature():
 	var creature: Creature = creature_scene.instantiate()
-	creature.global_position = global_position
 	creature.tree = tree
 	creature.base = base
 	creature.team = team
 	add_child(creature)
+	creature.global_position = global_position
 	current_population.append(creature)
 
 func evaluate_and_evolve():
