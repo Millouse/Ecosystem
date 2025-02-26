@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dxft0fnb4bc18"]
+[gd_scene load_steps=27 format=3 uid="uid://dxft0fnb4bc18"]
 
 [ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_tmurp"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_p0t88"]
@@ -12,6 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://bympj4kxe3onk" path="res://assets/textures/rocks/Ground022_2K-JPG_NormalGL.jpg" id="10_5fs7s"]
 [ext_resource type="PackedScene" uid="uid://di1twu8jdvmlj" path="res://assets/meshes/attractor.glb" id="11_vapf4"]
 [ext_resource type="PackedScene" uid="uid://6dlfwl7jn06g" path="res://assets/meshes/low_poly_tree.glb" id="12_vgyi2"]
+[ext_resource type="Script" path="res://scripts/range_food.gd" id="13_bhqxn"]
+[ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="13_s520f"]
+[ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="14_rh5r7"]
+[ext_resource type="Script" path="res://scripts/stock_food.gd" id="16_rk8l6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_41ghe"]
 render_priority = 0
@@ -166,6 +170,12 @@ shader_parameter/texture_normal = SubResource("NoiseTexture2D_qkpbf")
 material = SubResource("ShaderMaterial_ndun4")
 size = Vector3(2, 1, 2)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ukkx2"]
+size = Vector3(5.06348, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_td1y2"]
+size = Vector3(22.3159, 5.46399, 8.94348)
+
 [node name="Node3D" type="Node3D"]
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="."]
@@ -182,8 +192,8 @@ script = ExtResource("2_p0t88")
 _terrain_data = ExtResource("3_o4om3")
 chunk_size = 32
 collision_enabled = true
-collision_layer = 1
-collision_mask = 1
+collision_layer = 3
+collision_mask = 3
 shader_type = "Classic4"
 custom_shader = null
 custom_globalmap_shader = null
@@ -217,3 +227,58 @@ transform = Transform3D(-0.0762285, 0.0584561, -5.90901, -8.46197, -0.60736, 0.0
 
 [node name="low_poly_tree" parent="." instance=ExtResource("12_vgyi2")]
 transform = Transform3D(-2.9719, 0, -0.864204, 0, 3.095, 0, 0.864204, 0, -2.9719, 102.416, 0, 159.205)
+
+[node name="RangeFood" type="Area3D" parent="low_poly_tree"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00318, 0.1, 1.43611)
+collision_mask = 2
+script = ExtResource("13_bhqxn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="low_poly_tree/RangeFood"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.01587, 0.3, 7.62939e-06)
+shape = SubResource("BoxShape3D_ukkx2")
+
+[node name="AlgogenManager1" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("13_s520f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 148.183, 3.07884, 83.549)
+creature_scene = ExtResource("14_rh5r7")
+tree = NodePath("../low_poly_tree/RangeFood")
+base = NodePath("Nid")
+
+[node name="Nid" type="Area3D" parent="AlgogenManager1"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825729, -2.16887, 3.30556)
+collision_mask = 2
+script = ExtResource("16_rk8l6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AlgogenManager1/Nid"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.16663, -0.664419, 1.98587)
+shape = SubResource("BoxShape3D_td1y2")
+
+[node name="AlgogenManager2" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("13_s520f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.941, 3.07884, 81.1705)
+team = 1
+creature_scene = ExtResource("14_rh5r7")
+tree = NodePath("../low_poly_tree/RangeFood")
+base = NodePath("Nid")
+
+[node name="Nid" type="Area3D" parent="AlgogenManager2"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825729, -2.16887, 3.30556)
+collision_mask = 2
+script = ExtResource("16_rk8l6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AlgogenManager2/Nid"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.16663, -0.664419, 1.98587)
+shape = SubResource("BoxShape3D_td1y2")
+
+[node name="TestCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.779415, 0.626509, 0, -0.626509, 0.779415, 109.683, 27.1975, 148.882)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.185015, 0.982736, 0, -0.982736, 0.185015, 86.5228, 20.8075, 0)
+
+[node name="Creature" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("14_rh5r7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95.3186, 3.09063, 119.96)
+tree = NodePath("../low_poly_tree/RangeFood")
+base = NodePath("../AlgogenManager1/Nid")
+
+[connection signal="body_entered" from="low_poly_tree/RangeFood" to="low_poly_tree/RangeFood" method="_on_body_entered"]
+[connection signal="body_entered" from="AlgogenManager1/Nid" to="AlgogenManager1/Nid" method="_on_body_entered"]
+[connection signal="body_entered" from="AlgogenManager2/Nid" to="AlgogenManager2/Nid" method="_on_body_entered"]

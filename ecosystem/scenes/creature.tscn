@@ -242,10 +242,11 @@ _data = {
 "ROAM": SubResource("Animation_bpn64")
 }
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ugdfr"]
-radius = 0.124765
+[sub_resource type="SphereShape3D" id="SphereShape3D_pg07e"]
+radius = 0.793565
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_h3543"]
+radius = 3.21201
 
 [node name="Creature" type="RigidBody3D"]
 collision_layer = 2
@@ -257,7 +258,6 @@ max_contacts_reported = 3
 script = ExtResource("1_y37ah")
 
 [node name="Slime" type="Node3D" parent="."]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="Armature" type="Node3D" parent="Slime"]
 
@@ -312,8 +312,8 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127454, 0)
-shape = SubResource("SphereShape3D_ugdfr")
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.21901, 0)
+shape = SubResource("SphereShape3D_pg07e")
 
 [node name="JumpTimer" type="Timer" parent="."]
 unique_name_in_owner = true

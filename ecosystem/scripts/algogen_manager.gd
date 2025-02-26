@@ -3,14 +3,14 @@ extends Node3D
 # Selection method
 enum SelectionMethod { TOURNAMENT, ROULETTE }
 @export var selection_method: SelectionMethod = SelectionMethod.ROULETTE
+@export var team: int
 
 # Population settings
-const POPULATION_SIZE = 20
+const POPULATION_SIZE = 5
 const GENERATION_DURATION = 150
 
 # Scene references
 @export var creature_scene: PackedScene
-@export var spawn_point: Vector3
 @export var tree: Node
 @export var base: Node
 
@@ -37,9 +37,10 @@ func create_initial_population():
 
 func spawn_creature():
 	var creature: Creature = creature_scene.instantiate()
-	creature.position = spawn_point
+	creature.global_position = global_position
 	creature.tree = tree
 	creature.base = base
+	creature.team = team
 	add_child(creature)
 	current_population.append(creature)
 
@@ -152,7 +153,7 @@ func mutate(genes):
 func spawn_new_creature(genes = null):
 	var creature = creature_scene.instantiate()
 	add_child(creature)
-	creature.position = spawn_point
+	creature.position = global_position
 	if genes:
 		creature.genes = genes.duplicate()
 	return creature

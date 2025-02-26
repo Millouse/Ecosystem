@@ -25,8 +25,8 @@ var num_fruit: int
 var want_stock: bool = false
 var want_eat: bool = true
 
-var jump_strength: float = 3.
-var max_jump_distance: float = 0.75
+var jump_strength: float = 15.
+var max_jump_distance: float = 8.
 
 var slack_max_distance: float = 3.0 # When slacking, creature goes somewhere random in this range
 
@@ -54,6 +54,7 @@ func _ready() -> void:
 	var new_material := body_material.duplicate()
 	new_material.albedo_color = genes.color
 	slime_mesh.set_surface_override_material(0, new_material)
+	print("Choosing start objective")
 	choose_new_objective()
 	
 	jump_timer.wait_time = genes["speed"]
@@ -70,10 +71,11 @@ func genes_init():
 	seed(unique_seed)  # Set the random seed for this creature
 	
 	genes["color"] = Color(randf(), randf(), randf())
-	genes["stupidity"] = randf()
+	genes["stupidity"] = 0.0 # randf() # Set to 0 for test
 	genes["speed"] = 1.0 + randf()
 	genes["health"] = 1 # randi_range(1, 10) # Set to 1 for test
 	genes["hunger"] = randi_range(0, 2)
+	genes["slacking"] = 0.0
 
 func move() -> void:
 	if current_objective == Objective.ATTACK:
@@ -87,9 +89,10 @@ func move() -> void:
 	var distance = to_target.length()
 
 	# Only switch objective if not attacking/slacking and close to target
-	if (distance < max_jump_distance and current_objective not in [Objective.SLACK, Objective.ATTACK]):
-		choose_new_objective()
-		return
+	#if (distance < max_jump_distance and current_objective not in [Objective.SLACK, Objective.ATTACK]):
+		#print("Choosing new objective because reached objective")
+		#choose_new_objective()
+		#return
 	
 	# Calculate direction to target (horizontal component only)
 	var jump_direction = Vector3(to_target.x, 0, to_target.z).normalized()
@@ -103,7 +106,7 @@ func move() -> void:
 		jump_direction *= max_jump_distance  # Limit distance moved in one jump
 	
 	# Add a consistent upward impulse for the jump
-	var impulse = Vector3(jump_direction.x, jump_strength, jump_direction.z)
+	var impulse = Vector3(jump_direction.x, 3.0, jump_direction.z)
 	var deviation_strength = genes["stupidity"] * 0.5  # Scale the deviation by stupidity
 	var deviation = Vector3(randf_range(-deviation_strength, deviation_strength),
 	0,
@@ -126,15 +129,17 @@ func choose_new_objective() -> void:
 		slack_timer.start()
 	else:
 		if (want_eat):
+			print("New objective : to food")
 			current_objective = Objective.TO_FOOD
-			want_eat = false
-			want_stock = true
-			jump_target = tree.position
-		elif (want_stock):
-			current_objective = Objective.TO_BASE
 			want_eat = true
 			want_stock = false
-			jump_target = base.position
+			jump_target = tree.global_position
+		elif (want_stock):
+			print("New objective : to base")
+			current_objective = Objective.TO_BASE
+			want_eat = false
+			want_stock = true
+			jump_target = base.global_position
 			
 	#print("New objective : " + str(current_objective))
 	
@@ -149,6 +154,7 @@ func _on_slack_timer_timeout():
 	choose_new_objective()
 
 func _on_body_entered(body: Node) -> void:
+	print("Body entered : " + body.name)
 	if (body.name == "Ground"):
 		#print("Stopping")
 		# Stop movement when grounded to prevent sliding
@@ -156,16 +162,17 @@ func _on_body_entered(body: Node) -> void:
 		angular_velocity = Vector3.ZERO
 	if (body as Creature):
 		var enemy_creature = body as Creature
-		if (randf() < 0.7): # 70% chance of dealing damage - need to do better later
-			print("Dealing damage !")
-			enemy_creature.genes["health"] -= 1
-			if (enemy_creature.genes["health"] <= 0):
-				print("Killed !")
-				kill_count += 1
-				choose_new_objective()
+		if (enemy_creature.team != team):
+			if (randf() < 0.7): # 70% chance of dealing damage - need to do better later
+				print("Dealing damage !")
+				enemy_creature.genes["health"] -= 1
+				if (enemy_creature.genes["health"] <= 0):
+					print("Killed !")
+					kill_count += 1
+					choose_new_objective()
 
 func _on_agression_area_body_entered(body: Node3D) -> void:
-	print("Agression body entered" + body.name)
+	#print("Agression body entered" + body.name)
 	if body is RigidBody3D:
 		var creature = body as Creature
 		if (creature.team != team):

@@ -1,6 +1,5 @@
-[gd_scene load_steps=12 format=3 uid="uid://cs8r32a31k3ml"]
+[gd_scene load_steps=11 format=3 uid="uid://cs8r32a31k3ml"]
 
-[ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="1_csct4"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_7mob5"]
 [ext_resource type="Script" path="res://scripts/range_food.gd" id="2_qsiei"]
 [ext_resource type="Script" path="res://scripts/stock_food.gd" id="3_4w8iu"]
@@ -16,18 +15,13 @@ size = Vector3(20, 1, 20)
 [sub_resource type="BoxMesh" id="BoxMesh_dvcg0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pytgi"]
+size = Vector3(2.422, 3.81396, 2.17084)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_invbj"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ftkk8"]
 
 [node name="FoodSystem" type="Node3D"]
-
-[node name="AlgogenManager" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("1_csct4")]
-process_mode = 4
-creature_scene = ExtResource("2_7mob5")
-tree = NodePath("../Tree")
-base = NodePath("../Nid")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.356385, -0.225978)
@@ -62,11 +56,11 @@ collision_mask = 2
 script = ExtResource("2_qsiei")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RangeFood"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.0256042, 0.626782, -0.055954)
 shape = SubResource("BoxShape3D_pytgi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.2, 0, 0, 0, 0.5, -0.960966, 0, -1.37112)
+transform = Transform3D(0.5, 0, 0, 0, 0.2, 0, 0, 0, 0.5, -0.960966, 0, -6.89009)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("CylinderShape3D_invbj")
@@ -75,18 +69,12 @@ shape = SubResource("CylinderShape3D_invbj")
 mesh = SubResource("CylinderMesh_ftkk8")
 
 [node name="Creature" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("2_7mob5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.947781, 1.43368, 0.909711)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7759, 1.43368, -0.0426326)
 tree = NodePath("../Tree")
 base = NodePath("../Nid")
-
-[node name="Creature2" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("2_7mob5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211689, 0.405548, 0.909711)
-tree = NodePath("../Tree")
-base = NodePath("../Nid")
-team = 1
 
 [node name="Nid" type="Area3D" parent="."]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825722, -0.119598, -1.29052)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825722, -0.119598, -6.80949)
 collision_mask = 2
 script = ExtResource("3_4w8iu")
 

@@ -10,6 +10,7 @@ func _on_body_entered(body: Node3D) -> void:
 			creature.num_fruit = 0
 			creature.want_stock = false
 			creature.want_eat = true
+			creature.choose_new_objective()
 			print("fruit de la creature",creature.num_fruit)
 			print("fruit dans le stockage", num_fruit)
 		pass
