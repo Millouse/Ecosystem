@@ -1,14 +1,10 @@
 extends Node2D
 
-signal add_pop
-
 var size = Vector2(100, 100)
 var grid_size = 100
 
 # 0 for dead, 1 for alive
 var grid = []
-
-var cubes = []
 
 # grid with neighbours
 var neighbours = []
@@ -17,6 +13,8 @@ var neighbours = []
 
 var alive_neighbours = 0
 var rng = RandomNumberGenerator.new()
+
+var spawned_creature_count: int = 0
 
 func find_alive_neighbours(y: int, x: int, min_range: int, max_range: int):
 	var number_of_alive_neighbours = 0
@@ -39,17 +37,7 @@ func _input(_event: InputEvent) -> void:
 		get_tree().change_scene_to_file("res://scenes/selector_scenes.tscn")
 
 func _ready() -> void:
-	for y in range(size.y):
-		grid.append([])
-		neighbours.append([])
-		cubes.append([])
-		for x in range(size.x):
-			neighbours[y].append(0)
-			if rng.randf_range(0.0, 1.0) < 0.3:
-				grid[y].append(1)
-			else:
-				grid[y].append(0)
-			recolor(y, x)
+	reset()
 
 func survive(y: int, x: int):
 	if grid[y][x] == 1:
@@ -67,11 +55,24 @@ func survive(y: int, x: int):
 
 func recolor(y: int, x: int):
 	if grid[y][x] == 1:
-		#cubes[y][x].get_surface_override_material(0).albedo_color = Color(1, 1, 1)
 		tilemap.set_cell(Vector2(x, y), 1, Vector2.ZERO)
 	else:
-		#cubes[y][x].get_surface_override_material(0).albedo_color = Color(0, 0, 0)
 		tilemap.set_cell(Vector2(x, y), 0, Vector2.ZERO)
+
+func reset():
+	grid = []
+	neighbours = []
+	spawned_creature_count = 0
+	for y in range(size.y):
+		grid.append([])
+		neighbours.append([])
+		for x in range(size.x):
+			neighbours[y].append(0)
+			if rng.randf_range(0.0, 1.0) < 0.3:
+				grid[y].append(1)
+			else:
+				grid[y].append(0)
+			recolor(y, x)
 
 func _on_timer_timeout() -> void:
 	for y in range(size.y):
@@ -81,4 +82,7 @@ func _on_timer_timeout() -> void:
 	for y in range(size.y):
 		for x in range(size.x):
 			grid[y][x] = survive(y, x)
+			var adult = find_alive_neighbours(y, x, -2, 3)
+			if adult >= 18:
+				spawned_creature_count += 1
 			recolor(y, x)

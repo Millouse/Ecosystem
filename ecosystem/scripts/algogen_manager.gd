@@ -3,16 +3,19 @@ extends Node3D
 # Selection method
 enum SelectionMethod { TOURNAMENT, ROULETTE }
 @export var selection_method: SelectionMethod = SelectionMethod.ROULETTE
-@export var team: int
-
-# Population settings
-const POPULATION_SIZE = 5
-const GENERATION_DURATION = 150
 
 # Scene references
 @export var creature_scene: PackedScene
 @export var tree: Node
 @export var base: Node
+@export var gol: Node
+
+# Team for creatures
+@export var team: int
+
+# Population settings
+var population_size = 5
+const GENERATION_DURATION = 5
 
 # Population tracking
 var current_population = []
@@ -27,11 +30,13 @@ func _process(delta):
 	generation_timer += delta
 	# We'll probably do something else for generation evolving
 	if generation_timer >= GENERATION_DURATION:
+		population_size = gol.spawned_creature_count
+		gol.reset()
 		evaluate_and_evolve()
 		generation_timer = 0.0
 
 func create_initial_population():
-	for i in range(POPULATION_SIZE):
+	for i in range(population_size):
 		spawn_creature()
 	print("Generation 1 created!")
 
@@ -63,7 +68,7 @@ func evaluate_and_evolve():
 	new_population.append(elite)
 	
 	# Create rest of new population
-	while new_population.size() < POPULATION_SIZE:
+	while new_population.size() < population_size:
 		var parent1 = select_parent()
 		var parent2 = select_parent()
 		var child_genes = crossover(parent1.genes, parent2.genes)
@@ -71,11 +76,7 @@ func evaluate_and_evolve():
 		var child = spawn_new_creature(child_genes)
 		new_population.append(child)
 	
-	# Remove old population
-	for creature in current_population:
-		creature.queue_free()
-	
-	current_population = new_population
+	current_population += new_population
 	generation += 1
 
 func select_parent():
@@ -108,7 +109,7 @@ func roulette_selection():
 	# Generate a random point
 	var random_point = randf() * total_fitness
 
-	# Find the ball that corresponds to this point
+	# Find the creature that corresponds to this point
 	var current_sum = 0.0
 	for creature in current_population:
 		current_sum += creature.fitness
@@ -125,7 +126,7 @@ func crossover(genes1, genes2):
 	# TODO : Figure out how the crossover can be made without harcoding, same for mutate
 	new_genes.color = genes1.color if randf() < 0.5 else genes2.color
 
-	new_genes.stupidity = genes1.attention_span if randf() < 0.5 else genes2.attention_span
+	new_genes.stupidity = genes1.stupidity if randf() < 0.5 else genes2.stupidity
 	new_genes.speed = genes1.speed if randf() < 0.5 else genes2.speed
 	new_genes.agression = genes1.agression if randf() < 0.5 else genes2.agression
 	new_genes.slacking = genes1.slacking if randf() < 0.5 else genes2.slacking
@@ -138,7 +139,7 @@ func mutate(genes):
 	if randf() < 0.1:  # 10% mutation chance
 		genes.color += Color(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
 	if randf() < 0.1:
-		genes.attention_span += randf_range(-1.0, 1.0)
+		genes.stupidity += randf_range(-1.0, 1.0)
 	if randf() < 0.1:
 		genes.speed += randf_range(-1.0, 1.0)
 	if randf() < 0.1:
@@ -152,8 +153,11 @@ func mutate(genes):
 
 func spawn_new_creature(genes = null):
 	var creature = creature_scene.instantiate()
+	creature.tree = tree
+	creature.base = base
+	creature.team = team
 	add_child(creature)
-	creature.position = global_position
+	creature.global_position = global_position
 	if genes:
 		creature.genes = genes.duplicate()
 	return creature
