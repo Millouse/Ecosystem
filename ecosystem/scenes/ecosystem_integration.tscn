@@ -1,20 +1,20 @@
-[gd_scene load_steps=20 format=3 uid="uid://dxft0fnb4bc18"]
+[gd_scene load_steps=20 format=3 uid="uid://dueep33hhyc5e"]
 
-[ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_tmurp"]
-[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_p0t88"]
-[ext_resource type="Resource" path="res://assets/textures/ecoterrain/data.hterrain" id="3_o4om3"]
-[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="4_c1lnn"]
-[ext_resource type="Texture2D" uid="uid://ctuhp5246bhgr" path="res://assets/textures/dirt/Ground037_2K-JPG_Color.jpg" id="5_omn0d"]
-[ext_resource type="Texture2D" uid="uid://cjogcslb6h1ho" path="res://assets/textures/gravel/Gravel041_2K-JPG_Color.jpg" id="6_2kgls"]
-[ext_resource type="Texture2D" uid="uid://ohxrrd8ibeee" path="res://assets/textures/rocks/Ground022_2K-JPG_Color.jpg" id="7_8we4o"]
-[ext_resource type="Texture2D" uid="uid://c5f5n1cq16wkl" path="res://assets/textures/dirt/Ground037_2K-JPG_NormalGL.jpg" id="8_uuf1r"]
-[ext_resource type="Texture2D" uid="uid://ga3ap48rmpsp" path="res://assets/textures/gravel/Gravel041_2K-JPG_NormalGL.jpg" id="9_35d7b"]
-[ext_resource type="Texture2D" uid="uid://bympj4kxe3onk" path="res://assets/textures/rocks/Ground022_2K-JPG_NormalGL.jpg" id="10_5fs7s"]
-[ext_resource type="PackedScene" uid="uid://di1twu8jdvmlj" path="res://assets/meshes/attractor.glb" id="11_vapf4"]
+[ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_gcxjl"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_m37h1"]
+[ext_resource type="Resource" path="res://assets/textures/ecoterrain/data.hterrain" id="3_ngnvb"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="4_1msmw"]
+[ext_resource type="Texture2D" uid="uid://ctuhp5246bhgr" path="res://assets/textures/dirt/Ground037_2K-JPG_Color.jpg" id="5_tx0rx"]
+[ext_resource type="Texture2D" uid="uid://cjogcslb6h1ho" path="res://assets/textures/gravel/Gravel041_2K-JPG_Color.jpg" id="6_umtl6"]
+[ext_resource type="Texture2D" uid="uid://ohxrrd8ibeee" path="res://assets/textures/rocks/Ground022_2K-JPG_Color.jpg" id="7_r61jw"]
+[ext_resource type="Texture2D" uid="uid://c5f5n1cq16wkl" path="res://assets/textures/dirt/Ground037_2K-JPG_NormalGL.jpg" id="8_x0mcu"]
+[ext_resource type="Texture2D" uid="uid://ga3ap48rmpsp" path="res://assets/textures/gravel/Gravel041_2K-JPG_NormalGL.jpg" id="9_bf671"]
+[ext_resource type="Texture2D" uid="uid://bympj4kxe3onk" path="res://assets/textures/rocks/Ground022_2K-JPG_NormalGL.jpg" id="10_tf4gh"]
+[ext_resource type="PackedScene" uid="uid://di1twu8jdvmlj" path="res://assets/meshes/attractor.glb" id="11_px7uu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_41ghe"]
 render_priority = 0
-shader = ExtResource("1_tmurp")
+shader = ExtResource("1_gcxjl")
 shader_parameter/base_scale = 2.0
 shader_parameter/zoom_intensity = 1.5
 shader_parameter/zoom_speed = 0.5
@@ -28,9 +28,9 @@ shader_parameter/chromatic_strength = 0.05
 shader_parameter/wave_intensity = 0.1
 
 [sub_resource type="Resource" id="Resource_c8c4r"]
-script = ExtResource("4_c1lnn")
+script = ExtResource("4_1msmw")
 mode = 0
-textures = [[ExtResource("5_omn0d"), ExtResource("6_2kgls"), ExtResource("7_8we4o")], [ExtResource("8_uuf1r"), ExtResource("9_35d7b"), ExtResource("10_5fs7s")]]
+textures = [[ExtResource("5_tx0rx"), ExtResource("6_umtl6"), ExtResource("7_r61jw")], [ExtResource("8_x0mcu"), ExtResource("9_bf671"), ExtResource("10_tf4gh")]]
 
 [sub_resource type="Shader" id="Shader_kbx26"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.3.stable's StandardMaterial3D.
@@ -177,8 +177,8 @@ material = SubResource("ShaderMaterial_41ghe")
 
 [node name="HTerrain" type="Node3D" parent="."]
 transform = Transform3D(2.255, 0, 0, 0, 2.255, 0, 0, 0, 2.255, 0, 0, 0)
-script = ExtResource("2_p0t88")
-_terrain_data = ExtResource("3_o4om3")
+script = ExtResource("2_m37h1")
+_terrain_data = ExtResource("3_ngnvb")
 chunk_size = 32
 collision_enabled = true
 collision_layer = 1
@@ -205,11 +205,11 @@ mesh = SubResource("BoxMesh_oosjw")
 transform = Transform3D(20.2677, 0, 0, 0, 20.2677, 0, 0, 0, 30.1922, 157.919, -12.0248, 63.537)
 mesh = SubResource("BoxMesh_oosjw")
 
-[node name="attractor" parent="." instance=ExtResource("11_vapf4")]
+[node name="attractor" parent="." instance=ExtResource("11_px7uu")]
 transform = Transform3D(5.81262, -4.45743, 0, 8.71236, 2.97386, 0, 0, 0, 7.24341, 144.748, 48.6642, 74.1293)
 
-[node name="attractor2" parent="." instance=ExtResource("11_vapf4")]
+[node name="attractor2" parent="." instance=ExtResource("11_px7uu")]
 transform = Transform3D(-0.142987, 0.10965, -11.0839, 3.4883, 8.00347, 0.123156, 15.6437, -1.78365, -0.128771, 94.7543, 46.2564, 142.893)
 
-[node name="attractor3" parent="." instance=ExtResource("11_vapf4")]
+[node name="attractor3" parent="." instance=ExtResource("11_px7uu")]
 transform = Transform3D(-0.0762285, 0.0584561, -5.90901, -8.46197, -0.60736, 0.0412346, -1.18618, 4.32904, 0.0855759, 86.2283, 59.0037, 53.8562)

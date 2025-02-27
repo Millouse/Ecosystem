@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://2bgi6ifhyo8i"]
+[gd_scene load_steps=6 format=3 uid="uid://db1dmtn412uxo"]
 
-[ext_resource type="Script" path="res://Scripts/game_of_life.gd" id="1_mplcl"]
+[ext_resource type="Script" path="res://scripts/game_of_life.gd" id="1_mplcl"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_yxgik"]
 
