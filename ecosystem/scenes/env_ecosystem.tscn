@@ -194,7 +194,6 @@ size = Vector3(22.3159, 5.46399, 8.94348)
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.131, 0.418951, 110.578)
-visible = false
 flip_faces = true
 radius = 100.0
 radial_segments = 100
@@ -235,15 +234,12 @@ skeleton = NodePath("../..")
 
 [node name="attractor" parent="Environment" instance=ExtResource("11_vapf4")]
 transform = Transform3D(5.81262, -4.45743, 0, 8.71236, 2.97386, 0, 0, 0, 7.24341, 144.748, 48.6642, 74.1293)
-visible = false
 
 [node name="attractor2" parent="Environment" instance=ExtResource("11_vapf4")]
 transform = Transform3D(-0.142987, 0.10965, -11.0839, 3.4883, 8.00347, 0.123156, 15.6437, -1.78365, -0.128771, 94.7543, 46.2564, 142.893)
-visible = false
 
 [node name="attractor3" parent="Environment" instance=ExtResource("11_vapf4")]
 transform = Transform3D(-0.0762285, 0.0584561, -5.90901, -8.46197, -0.60736, 0.0412346, -1.18618, 4.32904, 0.0855759, 86.2283, 59.0037, 53.8562)
-visible = false
 
 [node name="low_poly_tree" parent="Environment" instance=ExtResource("12_vgyi2")]
 transform = Transform3D(-2.9719, 0, -0.864204, 0, 3.095, 0, 0.864204, 0, -2.9719, 102.416, 0, 159.205)

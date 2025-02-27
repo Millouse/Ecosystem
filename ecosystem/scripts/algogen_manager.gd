@@ -15,7 +15,7 @@ enum SelectionMethod { TOURNAMENT, ROULETTE }
 
 # Population settings
 var population_size = 5
-const GENERATION_DURATION = 5
+const GENERATION_DURATION = 10
 
 # Population tracking
 var current_population = []
@@ -39,15 +39,6 @@ func create_initial_population():
 	for i in range(population_size):
 		spawn_creature()
 	print("Generation 1 created!")
-
-func spawn_creature():
-	var creature: Creature = creature_scene.instantiate()
-	creature.tree = tree
-	creature.base = base
-	creature.team = team
-	add_child(creature)
-	creature.global_position = global_position
-	current_population.append(creature)
 
 func evaluate_and_evolve():
 	# Sort population by fitness
@@ -151,6 +142,16 @@ func mutate(genes):
 	if randf() < 0.1:
 		genes.hunger += randi_range(-1, 1)
 
+func spawn_creature():
+	var creature: Creature = creature_scene.instantiate()
+	creature.tree = tree
+	creature.base = base
+	creature.team = team
+	add_child(creature)
+	creature.global_position = global_position
+	current_population.append(creature)
+	creature.tree_exited.connect(_on_creature_tree_exited.bind(creature))
+
 func spawn_new_creature(genes = null):
 	var creature = creature_scene.instantiate()
 	creature.tree = tree
@@ -160,4 +161,11 @@ func spawn_new_creature(genes = null):
 	creature.global_position = global_position
 	if genes:
 		creature.genes = genes.duplicate()
+	creature.tree_exited.connect(_on_creature_tree_exited.bind(creature))
 	return creature
+
+
+func _on_creature_tree_exited(creature: Creature):
+	if current_population.has(creature):
+		current_population.erase(creature)
+		print("Creature removed from population.")
