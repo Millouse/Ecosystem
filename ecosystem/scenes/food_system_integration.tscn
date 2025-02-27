@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://cs8r32a31k3ml"]
+[gd_scene load_steps=13 format=3 uid="uid://cs8r32a31k3ml"]
 
 [ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="1_csct4"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_7mob5"]
 [ext_resource type="Script" path="res://scripts/range_food.gd" id="2_qsiei"]
 [ext_resource type="Script" path="res://scripts/stock_food.gd" id="3_4w8iu"]
+[ext_resource type="Script" path="res://scripts/detect_creatures.gd" id="5_j567g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(20, 1.004, 20)
@@ -93,6 +94,10 @@ script = ExtResource("3_4w8iu")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Nid"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_pytgi")
+
+[node name="DetectCreatures" type="RayCast3D" parent="."]
+collision_mask = 3
+script = ExtResource("5_j567g")
 
 [connection signal="body_entered" from="RangeFood" to="RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="Nid" to="Nid" method="_on_body_entered"]

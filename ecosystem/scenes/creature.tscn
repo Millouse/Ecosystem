@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=4 uid="uid://d3tfyw8h8qx24"]
 
-[ext_resource type="Script" path="res://scripts/creature.gd" id="1_y37ah"]
+[ext_resource type="Script" path="res://Scripts/creature.gd" id="1_wemby"]
 [ext_resource type="Texture2D" uid="uid://dj32terokd4yx" path="res://assets/textures/slime/SlimeTooth_Texture.png" id="3_5dg6s"]
 [ext_resource type="Texture2D" uid="uid://dqttisxoixi4f" path="res://assets/textures/slime/SlimeBody_Texture_Grey.png" id="3_nhitn"]
 
@@ -254,7 +254,7 @@ axis_lock_angular_x = true
 axis_lock_angular_z = true
 contact_monitor = true
 max_contacts_reported = 3
-script = ExtResource("1_y37ah")
+script = ExtResource("1_wemby")
 
 [node name="Slime" type="Node3D" parent="."]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
@@ -312,7 +312,7 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.999703, 0, -0.0243798, 0, 1, 0, 0.0243798, 0, 0.999703, 0.0023973, 0.127454, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127454, 0)
 shape = SubResource("SphereShape3D_ugdfr")
 
 [node name="JumpTimer" type="Timer" parent="."]
@@ -325,7 +325,6 @@ wait_time = 5.0
 one_shot = true
 
 [node name="AgressionArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0282111, 0, 0)
 collision_layer = 2
 collision_mask = 2
 
