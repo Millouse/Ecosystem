@@ -45,10 +45,8 @@ var genes: Dictionary = {
 	"hunger" = 1,
 }
 
-var fitness: int = 0
-
 func _ready() -> void:
-	genes_init() # WARNING : That may fuck up crossover / mutation !
+	genes_init()
 	var body_material: Material = slime_mesh.get_surface_override_material(0)
 	var new_material := body_material.duplicate()
 	new_material.albedo_color = genes.color
@@ -69,7 +67,10 @@ func genes_init():
 	var unique_seed = get_instance_id()  # Unique seed for each creature
 	seed(unique_seed)  # Set the random seed for this creature
 	
-	genes["color"] = Color(randf(), randf(), randf())
+	var red = 1.0 if team == 0 else 0.0
+	var blue = 1.0 if team == 1 else 0.0
+	
+	genes["color"] = Color(red, randf(), blue)
 	genes["stupidity"] = randf()
 	genes["speed"] = 1.0 + randf()
 	genes["health"] = randi_range(1, 10)
@@ -184,9 +185,5 @@ func _on_agression_area_body_entered(body: Node3D) -> void:
 			else:
 				#print("Fleeing")
 				current_objective = Objective.FLEE
-				var current_pos = global_transform.origin
-				var random_angle = randf_range(0, 2 * PI)
-				var distance = 5
-				var offset = Vector3(cos(random_angle) * distance, 0, sin(random_angle) * distance)
-				jump_target = current_pos + offset
+				jump_target = base.global_position
 				flee_timer.start()

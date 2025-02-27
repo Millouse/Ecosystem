@@ -11,13 +11,12 @@ var current_grid: PackedInt32Array
 var next_grid: PackedInt32Array
 var changed_cells := []
 var spawned_creature_count := 0
-var rng := RandomNumberGenerator.new()
 
 @onready var tilemap = $TileMapLayer
 
 func _ready() -> void:
 	var unique_seed = get_instance_id()  # Unique seed for each gol
-	rng.set_seed(unique_seed)  # Set the random seed for this gol
+	seed(unique_seed)  # Set the random seed for this gol
 	
 	# Precompute neighbor indices for each cell
 	moore_neighbors.resize(grid_size)
@@ -61,7 +60,7 @@ func reset() -> void:
 	spawned_creature_count = 0
 	
 	for i in grid_size:
-		current_grid[i] = 1 if rng.randf() < 0.3 else 0
+		current_grid[i] = 1 if randf() < 0.3 else 0
 	
 	update_entire_tilemap()
 
@@ -78,7 +77,6 @@ func _input(_event: InputEvent) -> void:
 
 func _on_timer_timeout() -> void:
 	changed_cells.clear()
-	spawned_creature_count = 0
 	var width = int(size.x)
 	
 	for i in grid_size:
@@ -97,7 +95,7 @@ func _on_timer_timeout() -> void:
 			var adult_count = 0
 			for j in adult_neighbors[i]:
 				adult_count += current_grid[j]
-			if adult_count >= 18:
+			if adult_count >= 20:
 				spawned_creature_count += 1
 		else:
 			next_state = 1 if (moore_count == 3) else 0
