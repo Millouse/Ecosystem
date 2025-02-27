@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://cka5jj7p3bstd"]
+[gd_scene load_steps=7 format=4 uid="uid://b6oondow37gp4"]
 
 [ext_resource type="Texture2D" uid="uid://deltftpaecn1v" path="res://assets/Black Paint.png" id="1_6wrnb"]
 [ext_resource type="Script" path="res://scenes/2d_game_of_life.gd" id="1_xg4tj"]

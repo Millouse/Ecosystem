@@ -18,20 +18,17 @@ func _process(delta: float) -> void:
 	pass
 
 func _on_body_entered(body: Node3D) -> void:
-	print("Range food entered")
 	if body is Creature :
-		print("body is creature")
 		var creature = body as Creature
 		if creature.want_eat:
-			print("Creature want eat")
 			creature.num_fruit += num_fruit
 			num_fruit = 0
 			creature.want_eat = false
 			creature.want_stock = true
 			
 			creature.choose_new_objective()
-			print("fruit de la creature",creature.num_fruit)
-			print("fruit de l'arbre", num_fruit)
+			#print("fruit de la creature",creature.num_fruit)
+			#print("fruit de l'arbre", num_fruit)
 		pass
 		
 	#print("Un objet est entré :", body.name)

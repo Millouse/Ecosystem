@@ -103,7 +103,7 @@ func roulette_selection():
 	# Calculate total fitness
 	var total_fitness = 0.0
 	for creature in current_population:
-		total_fitness += creature.fitness
+		total_fitness += creature.get_fitness()
 
 	# Generate a random point
 	var random_point = randf() * total_fitness

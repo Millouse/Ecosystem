@@ -1,5 +1,13 @@
-
 class_name Creature extends RigidBody3D
+
+# Still exported for no reason, but easier testing
+@export var tree: Node 
+@export var base: Node
+
+@onready var jump_timer: Timer = %JumpTimer
+@onready var slack_timer: Timer = %SlackTimer
+@onready var flee_timer: Timer = %FleeTimer
+@onready var slime_mesh: MeshInstance3D = %Mesh
 
 enum Objective {
 	TO_BASE,
@@ -8,32 +16,22 @@ enum Objective {
 	ATTACK,
 	FLEE
 }
-
-@export var tree: Node
-@export var base: Node
-
-var jump_target: Vector3 = Vector3(0., 0., 0.)
-@onready var jump_timer: Timer = %JumpTimer
-@onready var slack_timer: Timer = %SlackTimer
-@onready var flee_timer: Timer = %FleeTimer
-
-@onready var slime_mesh: MeshInstance3D = %Mesh
-
 var current_objective: Objective
 
 var num_fruit: int
 var want_stock: bool = false
 var want_eat: bool = true
 
+var jump_target: Vector3 = Vector3(0., 0., 0.)
 var jump_strength: float = 15.
 var max_jump_distance: float = 8.
 
 var slack_max_distance: float = 3.0 # When slacking, creature goes somewhere random in this range
 
-var raycast: RayCast3D  # To check if the rigid body is on the ground
+var team: int
+var enemy: RigidBody3D = null # Used for target tracking when in ATTACK state
 
-@export var team: int # Export for testing purposes
-var enemy: RigidBody3D = null
+var fruits_stocked: int = 0
 var kill_count: int = 0
 
 # Genes for the object
@@ -46,7 +44,8 @@ var genes: Dictionary = {
 	"health" = 1,
 	"hunger" = 1,
 }
-var fitness # TODO : Figure out what fitness will be. Maybe stocked food / kills ?
+
+var fitness: int = 0
 
 func _ready() -> void:
 	genes_init() # WARNING : That may fuck up crossover / mutation !
@@ -143,6 +142,9 @@ func generate_slack_target() -> Vector3:
 	var distance = randf_range(1.0, slack_max_distance)
 	var offset = Vector3(cos(random_angle) * distance, 0, sin(random_angle) * distance)
 	return current_pos + offset
+	
+func get_fitness() -> int:
+	return kill_count + fruits_stocked
 
 func _on_slack_timer_timeout():
 	choose_new_objective()
