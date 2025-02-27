@@ -16,6 +16,9 @@ var rng := RandomNumberGenerator.new()
 @onready var tilemap = $TileMapLayer
 
 func _ready() -> void:
+	var unique_seed = get_instance_id()  # Unique seed for each gol
+	rng.set_seed(unique_seed)  # Set the random seed for this gol
+	
 	# Precompute neighbor indices for each cell
 	moore_neighbors.resize(grid_size)
 	adult_neighbors.resize(grid_size)

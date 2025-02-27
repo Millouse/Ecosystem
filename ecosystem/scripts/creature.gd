@@ -70,9 +70,9 @@ func genes_init():
 	seed(unique_seed)  # Set the random seed for this creature
 	
 	genes["color"] = Color(randf(), randf(), randf())
-	genes["stupidity"] = 0.0 # randf() # Set to 0 for test
+	genes["stupidity"] = randf()
 	genes["speed"] = 1.0 + randf()
-	genes["health"] = 1 # randi_range(1, 10) # Set to 1 for test
+	genes["health"] = randi_range(1, 10)
 	genes["hunger"] = randi_range(0, 2)
 	genes["slacking"] = 0.0
 
@@ -122,13 +122,13 @@ func choose_new_objective() -> void:
 		slack_timer.start()
 	else:
 		if (want_eat):
-			print("New objective : to food")
+			#print("New objective : to food")
 			current_objective = Objective.TO_FOOD
 			want_eat = true
 			want_stock = false
 			jump_target = tree.global_position
 		elif (want_stock):
-			print("New objective : to base")
+			#print("New objective : to base")
 			current_objective = Objective.TO_BASE
 			want_eat = false
 			want_stock = true
@@ -163,10 +163,10 @@ func _on_body_entered(body: Node) -> void:
 		var enemy_creature = body as Creature
 		if (enemy_creature.team != team):
 			if (randf() < 0.7): # 70% chance of dealing damage - need to do better later
-				print("Dealing damage !")
+				#print("Dealing damage !")
 				enemy_creature.genes["health"] -= 1
 				if (enemy_creature.genes["health"] <= 0):
-					print("Killed !")
+					#print("Killed !")
 					kill_count += 1
 					choose_new_objective()
 
@@ -177,12 +177,12 @@ func _on_agression_area_body_entered(body: Node3D) -> void:
 		if (creature.team != team):
 			var roll: float = randf()
 			if (roll < genes["agression"]):
-				print("Attacking")
+				#print("Attacking")
 				current_objective = Objective.ATTACK
 				jump_target = creature.position
 				enemy = creature
 			else:
-				print("Fleeing")
+				#print("Fleeing")
 				current_objective = Objective.FLEE
 				var current_pos = global_transform.origin
 				var random_angle = randf_range(0, 2 * PI)

@@ -38,18 +38,18 @@ func _process(delta):
 func create_initial_population():
 	for i in range(population_size):
 		spawn_creature()
-	print("Generation 1 created!")
+	print("Team ", team, " generation 1 created!")
 
 func evaluate_and_evolve():
 	# Sort population by fitness
-	current_population.sort_custom(func(a, b): return a.fitness > b.fitness)
+	current_population.sort_custom(func(a, b): return a.get_fitness() > b.get_fitness())
 	
 	# Store best genes
-	best_fitness = current_population[0].fitness
+	best_fitness = current_population[0].get_fitness()
 	var best_genes = current_population[0].genes.duplicate()
 	
-	print("Generation ", generation, " complete")
-	print("Best fitness: ", best_fitness)
+	print("Team ", team, " generation ", generation, " complete")
+	print("Team ", team, " best fitness: ", best_fitness)
 	
 	var new_population = []
 	
@@ -85,9 +85,9 @@ func tournament_selection():
 	
 	for i in range(tournament_size):
 		var contestant = current_population[randi() % current_population.size()]
-		if best == null or contestant.fitness > tournament_best_fitness:
+		if best == null or contestant.get_fitness() > tournament_best_fitness:
 			best = contestant
-			tournament_best_fitness = contestant.fitness
+			tournament_best_fitness = contestant.get_fitness()
 	
 	return best
 	
@@ -103,7 +103,7 @@ func roulette_selection():
 	# Find the creature that corresponds to this point
 	var current_sum = 0.0
 	for creature in current_population:
-		current_sum += creature.fitness
+		current_sum += creature.get_fitness()
 		if current_sum > random_point:
 			return creature
 
@@ -168,4 +168,4 @@ func spawn_new_creature(genes = null):
 func _on_creature_tree_exited(creature: Creature):
 	if current_population.has(creature):
 		current_population.erase(creature)
-		print("Creature removed from population.")
+		#print("Creature removed from population.")
