@@ -324,7 +324,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.16663, -0.664419, 1.
 shape = SubResource("BoxShape3D_td1y2")
 
 [node name="TestCamera" type="Camera3D" parent="."]
-transform = Transform3D(-0.352671, -0.873328, 0.336038, 0, 0.359112, 0.933295, -0.935748, 0.329146, -0.126648, 158.67, 11.7934, 56.6449)
+transform = Transform3D(-0.999798, 0.0125955, -0.0157193, 0, 0.780383, 0.625302, 0.0201431, 0.625176, -0.780225, 108.691, 42.8171, 38.294)
 
 [node name="FpsCounter" parent="." instance=ExtResource("18_kgmni")]
 
