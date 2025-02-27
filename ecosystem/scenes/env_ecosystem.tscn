@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dxft0fnb4bc18"]
+[gd_scene load_steps=31 format=3 uid="uid://dxft0fnb4bc18"]
 
 [ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_tmurp"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_p0t88"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="13_s520f"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="14_rh5r7"]
 [ext_resource type="Script" path="res://scripts/stock_food.gd" id="16_rk8l6"]
+[ext_resource type="PackedScene" uid="uid://b6oondow37gp4" path="res://scenes/2d_game_of_life.tscn" id="17_v7dti"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_41ghe"]
 render_priority = 0
@@ -173,20 +174,33 @@ size = Vector3(2, 1, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ukkx2"]
 size = Vector3(5.06348, 1, 1)
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_kxc5x"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_gbh0c"]
+viewport_path = NodePath("AlgogenManager1/GameOfLifeSubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdhmf"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_gbh0c")
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_td1y2"]
 size = Vector3(22.3159, 5.46399, 8.94348)
 
 [node name="Node3D" type="Node3D"]
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.131, 0.418951, 110.578)
+visible = false
 flip_faces = true
 radius = 100.0
 radial_segments = 100
 rings = 100
 material = SubResource("ShaderMaterial_41ghe")
 
-[node name="HTerrain" type="Node3D" parent="."]
+[node name="HTerrain" type="Node3D" parent="Environment"]
 transform = Transform3D(2.255, 0, 0, 0, 2.255, 0, 0, 0, 2.255, 0, 0, 0)
 script = ExtResource("2_p0t88")
 _terrain_data = ExtResource("3_o4om3")
@@ -208,40 +222,60 @@ shader_params/u_globalmap_blend_start = null
 shader_params/u_globalmap_blend_distance = null
 shader_params/u_colormap_opacity_per_texture = null
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(20.2677, 0, 0, 0, 20.2677, 0, 0, 0, 20.2677, 73.9752, -12.0248, 60.2964)
 mesh = SubResource("BoxMesh_oosjw")
+skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(20.2677, 0, 0, 0, 20.2677, 0, 0, 0, 30.1922, 157.919, -12.0248, 63.537)
 mesh = SubResource("BoxMesh_oosjw")
+skeleton = NodePath("../..")
 
-[node name="attractor" parent="." instance=ExtResource("11_vapf4")]
+[node name="attractor" parent="Environment" instance=ExtResource("11_vapf4")]
 transform = Transform3D(5.81262, -4.45743, 0, 8.71236, 2.97386, 0, 0, 0, 7.24341, 144.748, 48.6642, 74.1293)
 
-[node name="attractor2" parent="." instance=ExtResource("11_vapf4")]
+[node name="attractor2" parent="Environment" instance=ExtResource("11_vapf4")]
 transform = Transform3D(-0.142987, 0.10965, -11.0839, 3.4883, 8.00347, 0.123156, 15.6437, -1.78365, -0.128771, 94.7543, 46.2564, 142.893)
 
-[node name="attractor3" parent="." instance=ExtResource("11_vapf4")]
+[node name="attractor3" parent="Environment" instance=ExtResource("11_vapf4")]
 transform = Transform3D(-0.0762285, 0.0584561, -5.90901, -8.46197, -0.60736, 0.0412346, -1.18618, 4.32904, 0.0855759, 86.2283, 59.0037, 53.8562)
 
-[node name="low_poly_tree" parent="." instance=ExtResource("12_vgyi2")]
+[node name="low_poly_tree" parent="Environment" instance=ExtResource("12_vgyi2")]
 transform = Transform3D(-2.9719, 0, -0.864204, 0, 3.095, 0, 0.864204, 0, -2.9719, 102.416, 0, 159.205)
 
-[node name="RangeFood" type="Area3D" parent="low_poly_tree"]
+[node name="RangeFood" type="Area3D" parent="Environment/low_poly_tree"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00318, 0.1, 1.43611)
 collision_mask = 2
 script = ExtResource("13_bhqxn")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="low_poly_tree/RangeFood"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/low_poly_tree/RangeFood"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.01587, 0.3, 7.62939e-06)
 shape = SubResource("BoxShape3D_ukkx2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.185015, 0.982736, 0, -0.982736, 0.185015, 86.5228, 20.8075, 0)
+shadow_enabled = true
 
 [node name="AlgogenManager1" parent="." node_paths=PackedStringArray("tree", "base") instance=ExtResource("13_s520f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 148.183, 3.07884, 83.549)
 creature_scene = ExtResource("14_rh5r7")
-tree = NodePath("../low_poly_tree/RangeFood")
+tree = NodePath("../Environment/low_poly_tree/RangeFood")
 base = NodePath("Nid")
+
+[node name="GameOfLifeSubViewport" type="SubViewport" parent="AlgogenManager1"]
+disable_3d = true
+size = Vector2i(1600, 1600)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="2DGameOfLife" parent="AlgogenManager1/GameOfLifeSubViewport" instance=ExtResource("17_v7dti")]
+
+[node name="GameOfLifePlane" type="MeshInstance3D" parent="AlgogenManager1"]
+transform = Transform3D(6.73642, 0, 0, 0, 6.73642, 0, 0, 0, 6.73642, 5.19151, -10.3684, -24.3258)
+mesh = SubResource("PlaneMesh_kxc5x")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_vdhmf")
 
 [node name="Nid" type="Area3D" parent="AlgogenManager1"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825729, -2.16887, 3.30556)
@@ -256,8 +290,22 @@ shape = SubResource("BoxShape3D_td1y2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.941, 3.07884, 81.1705)
 team = 1
 creature_scene = ExtResource("14_rh5r7")
-tree = NodePath("../low_poly_tree/RangeFood")
+tree = NodePath("../Environment/low_poly_tree/RangeFood")
 base = NodePath("Nid")
+
+[node name="GameOfLifeSubViewport2" type="SubViewport" parent="AlgogenManager2"]
+disable_3d = true
+size = Vector2i(1600, 1600)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="2DGameOfLife" parent="AlgogenManager2/GameOfLifeSubViewport2" instance=ExtResource("17_v7dti")]
+
+[node name="GameOfLifePlane2" type="MeshInstance3D" parent="AlgogenManager2"]
+transform = Transform3D(6.73642, 0, 0, 0, 6.73642, 0, 0, 0, 6.73642, -3.52785, -10.3684, -21.9473)
+mesh = SubResource("PlaneMesh_kxc5x")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_vdhmf")
 
 [node name="Nid" type="Area3D" parent="AlgogenManager2"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825729, -2.16887, 3.30556)
@@ -269,11 +317,8 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.16663, -0.664419, 1.
 shape = SubResource("BoxShape3D_td1y2")
 
 [node name="TestCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.779415, 0.626509, 0, -0.626509, 0.779415, 109.683, 27.1975, 148.882)
+transform = Transform3D(-0.990027, -0.14088, 0.00011218, 0, 0.000796275, 1, -0.140881, 0.990027, -0.000788333, 157.734, 4.20661, 59.9279)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.185015, 0.982736, 0, -0.982736, 0.185015, 86.5228, 20.8075, 0)
-
-[connection signal="body_entered" from="low_poly_tree/RangeFood" to="low_poly_tree/RangeFood" method="_on_body_entered"]
+[connection signal="body_entered" from="Environment/low_poly_tree/RangeFood" to="Environment/low_poly_tree/RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="AlgogenManager1/Nid" to="AlgogenManager1/Nid" method="_on_body_entered"]
 [connection signal="body_entered" from="AlgogenManager2/Nid" to="AlgogenManager2/Nid" method="_on_body_entered"]
