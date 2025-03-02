@@ -8,8 +8,7 @@ func _ready() -> void:
 	pass
 
 func selection_mouse(event : InputEvent)->void:
-	if event is InputEventMouseButton and event.pressed:
-		print("clic")
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var mouse_position = get_viewport().get_mouse_position();
 		var start = get_viewport().get_camera_3d().project_ray_origin(mouse_position)
 		var direction = get_viewport().get_camera_3d().project_ray_normal(mouse_position)
@@ -18,8 +17,9 @@ func selection_mouse(event : InputEvent)->void:
 		if(is_colliding() ):
 			var collider = get_collider()
 			collider = collider as Creature
-			cam.set_target(collider)
-			cam.is_follow = true
+			if(collider as Creature):
+				cam.set_target(collider)
+				cam.is_follow = true
 			#var came_spec = cam_spec.instantiate()
 			#cam_spec.set_target(collider)
 			#cam_spec.set_target(collider)
