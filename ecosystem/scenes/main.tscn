@@ -1,0 +1,390 @@
+[gd_scene load_steps=38 format=3 uid="uid://dxft0fnb4bc18"]
+
+[ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_ci65a"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_6pnjw"]
+[ext_resource type="Resource" path="res://assets/textures/ecoterrain/data.hterrain" id="3_hsh5a"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="4_llah7"]
+[ext_resource type="Texture2D" uid="uid://ctuhp5246bhgr" path="res://assets/textures/dirt/Ground037_2K-JPG_Color.jpg" id="5_2d2uk"]
+[ext_resource type="Texture2D" uid="uid://cjogcslb6h1ho" path="res://assets/textures/gravel/Gravel041_2K-JPG_Color.jpg" id="6_ej1lw"]
+[ext_resource type="Texture2D" uid="uid://ohxrrd8ibeee" path="res://assets/textures/rocks/Ground022_2K-JPG_Color.jpg" id="7_t4rlc"]
+[ext_resource type="Texture2D" uid="uid://c5f5n1cq16wkl" path="res://assets/textures/dirt/Ground037_2K-JPG_NormalGL.jpg" id="8_dr1ax"]
+[ext_resource type="Texture2D" uid="uid://ga3ap48rmpsp" path="res://assets/textures/gravel/Gravel041_2K-JPG_NormalGL.jpg" id="9_e3a2e"]
+[ext_resource type="Texture2D" uid="uid://bympj4kxe3onk" path="res://assets/textures/rocks/Ground022_2K-JPG_NormalGL.jpg" id="10_pqspi"]
+[ext_resource type="PackedScene" uid="uid://di1twu8jdvmlj" path="res://assets/meshes/attractor.glb" id="11_32rkr"]
+[ext_resource type="PackedScene" uid="uid://6dlfwl7jn06g" path="res://assets/meshes/low_poly_tree.glb" id="12_s4h2k"]
+[ext_resource type="Script" path="res://scripts/range_food.gd" id="13_0bk5w"]
+[ext_resource type="PackedScene" uid="uid://bvat2waxddg1v" path="res://scenes/algogen_manager.tscn" id="14_nu44p"]
+[ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="15_oqidd"]
+[ext_resource type="PackedScene" uid="uid://b6oondow37gp4" path="res://scenes/2d_game_of_life.tscn" id="16_htu41"]
+[ext_resource type="Script" path="res://scripts/stock_food.gd" id="17_qng7f"]
+[ext_resource type="PackedScene" uid="uid://57siin0txr7w" path="res://scenes/fps_counter.tscn" id="18_v4y8a"]
+[ext_resource type="Script" path="res://Scripts/CameraMouvement.gd" id="19_aake6"]
+[ext_resource type="Script" path="res://Scripts/detect_creatures.gd" id="20_fnu2y"]
+[ext_resource type="Script" path="res://Scripts/GenStat.gd" id="21_p46k2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_41ghe"]
+render_priority = 0
+shader = ExtResource("1_ci65a")
+shader_parameter/base_scale = 2.0
+shader_parameter/zoom_intensity = 1.5
+shader_parameter/zoom_speed = 0.5
+shader_parameter/speed = 0.1
+shader_parameter/iterations = 20
+shader_parameter/color1 = Vector3(1, 0, 0)
+shader_parameter/color2 = Vector3(0, 0, 1)
+shader_parameter/warp_intensity = 0.3
+shader_parameter/rotation_speed = 0.2
+shader_parameter/chromatic_strength = 0.05
+shader_parameter/wave_intensity = 0.1
+
+[sub_resource type="Resource" id="Resource_c8c4r"]
+script = ExtResource("4_llah7")
+mode = 0
+textures = [[ExtResource("5_2d2uk"), ExtResource("6_ej1lw"), ExtResource("7_t4rlc")], [ExtResource("8_dr1ax"), ExtResource("9_e3a2e"), ExtResource("10_pqspi")]]
+
+[sub_resource type="Shader" id="Shader_kbx26"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.3.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, depth_draw_always, cull_back, diffuse_burley, specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform float point_size : hint_range(0.1, 128.0, 0.1);
+
+uniform float roughness : hint_range(0.0, 1.0);
+uniform sampler2D texture_metallic : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r, filter_linear_mipmap, repeat_enable;
+
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float metallic : hint_range(0.0, 1.0, 0.01);
+
+uniform sampler2D texture_refraction : filter_linear_mipmap, repeat_enable;
+uniform float refraction : hint_range(-1.0, 1.0, 0.001);
+uniform vec4 refraction_texture_channel;
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
+
+uniform sampler2D texture_normal : hint_roughness_normal, filter_linear_mipmap, repeat_enable;
+uniform float normal_scale : hint_range(-16.0, 16.0);
+varying vec3 uv1_triplanar_pos;
+
+uniform float uv1_blend_sharpness : hint_range(0.0, 150.0, 0.001);
+varying vec3 uv1_power_normal;
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+void vertex() {
+	vec3 normal = MODEL_NORMAL_MATRIX * NORMAL;
+
+	TANGENT = vec3(0.0, 0.0, -1.0) * abs(normal.x);
+	TANGENT += vec3(1.0, 0.0, 0.0) * abs(normal.y);
+	TANGENT += vec3(1.0, 0.0, 0.0) * abs(normal.z);
+	TANGENT = inverse(MODEL_NORMAL_MATRIX) * normalize(TANGENT);
+
+	BINORMAL = vec3(0.0, 1.0, 0.0) * abs(normal.x);
+	BINORMAL += vec3(0.0, 0.0, -1.0) * abs(normal.y);
+	BINORMAL += vec3(0.0, 1.0, 0.0) * abs(normal.z);
+	BINORMAL = inverse(MODEL_NORMAL_MATRIX) * normalize(BINORMAL);
+
+	// UV1 Triplanar: Enabled (with World Triplanar)
+	uv1_power_normal = pow(abs(normal), vec3(uv1_blend_sharpness));
+	uv1_triplanar_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz * uv1_scale + uv1_offset + TIME * 0.1;
+	uv1_power_normal /= dot(uv1_power_normal, vec3(1.0));
+	uv1_triplanar_pos *= vec3(1.0, -1.0, 1.0);
+}
+
+vec4 triplanar_texture(sampler2D p_sampler, vec3 p_weights, vec3 p_triplanar_pos) {
+	vec4 samp = vec4(0.0);
+	samp += texture(p_sampler, p_triplanar_pos.xy) * p_weights.z;
+	samp += texture(p_sampler, p_triplanar_pos.xz) * p_weights.y;
+	samp += texture(p_sampler, p_triplanar_pos.zy * vec2(-1.0, 1.0)) * p_weights.x;
+	return samp;
+}
+
+void fragment() {
+	vec4 albedo_tex = triplanar_texture(texture_albedo, uv1_power_normal, uv1_triplanar_pos);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+
+	float metallic_tex = dot(triplanar_texture(texture_metallic, uv1_power_normal, uv1_triplanar_pos), metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	SPECULAR = specular;
+
+	vec4 roughness_texture_channel = vec4(1.0, 0.0, 0.0, 0.0);
+	float roughness_tex = dot(triplanar_texture(texture_roughness, uv1_power_normal, uv1_triplanar_pos), roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+
+	// Normal Map: Enabled
+	NORMAL_MAP = triplanar_texture(texture_normal, uv1_power_normal, uv1_triplanar_pos).rgb;
+	NORMAL_MAP_DEPTH = normal_scale;
+
+	// Refraction: Enabled (with normal map texture)
+	vec3 unpacked_normal = NORMAL_MAP;
+	unpacked_normal.xy = unpacked_normal.xy * 2.0 - 1.0;
+	unpacked_normal.z = sqrt(max(0.0, 1.0 - dot(unpacked_normal.xy, unpacked_normal.xy)));
+	vec3 ref_normal = normalize(mix(
+			NORMAL,
+			TANGENT * unpacked_normal.x + BINORMAL * unpacked_normal.y + NORMAL * unpacked_normal.z,
+			NORMAL_MAP_DEPTH));
+	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * dot(triplanar_texture(texture_refraction, uv1_power_normal, uv1_triplanar_pos), refraction_texture_channel) * refraction;
+
+	float ref_amount = 1.0 - albedo.a * albedo_tex.a;
+	EMISSION += textureLod(screen_texture, ref_ofs, ROUGHNESS * 8.0).rgb * ref_amount * EXPOSURE;
+	ALBEDO *= 1.0 - ref_amount;
+	// Force transparency on the material (required for refraction).
+	ALPHA = 1.0;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4bjbq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qkpbf"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_4bjbq")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8j2db"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_4bjbq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ndun4"]
+render_priority = 0
+shader = SubResource("Shader_kbx26")
+shader_parameter/albedo = Color(0.0470588, 0.317647, 0.466667, 0.505882)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/refraction = 0.05
+shader_parameter/refraction_texture_channel = null
+shader_parameter/normal_scale = 1.0
+shader_parameter/uv1_blend_sharpness = 1.0
+shader_parameter/uv1_scale = Vector3(0.04, 0.04, 0.04)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_refraction = SubResource("NoiseTexture2D_8j2db")
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_qkpbf")
+
+[sub_resource type="BoxMesh" id="BoxMesh_oosjw"]
+material = SubResource("ShaderMaterial_ndun4")
+size = Vector3(2, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ukkx2"]
+size = Vector3(5.06348, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kxc5x"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_gbh0c"]
+viewport_path = NodePath("AlgogenManager1/GameOfLifeSubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdhmf"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_gbh0c")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_td1y2"]
+size = Vector3(22.3159, 5.46399, 8.94348)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_my0ld"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jq6bb"]
+bg_color = Color(0, 0, 0, 0.643137)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_yi802"]
+font_size = 18
+font_color = Color(0.796661, 0.762097, 0.844328, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.131, 0.418951, 110.578)
+flip_faces = true
+radius = 100.0
+radial_segments = 100
+rings = 100
+material = SubResource("ShaderMaterial_41ghe")
+
+[node name="HTerrain" type="Node3D" parent="Environment"]
+transform = Transform3D(2.255, 0, 0, 0, 2.255, 0, 0, 0, 2.255, 0, 0, 0)
+script = ExtResource("2_6pnjw")
+_terrain_data = ExtResource("3_hsh5a")
+chunk_size = 32
+collision_enabled = true
+collision_layer = 3
+collision_mask = 3
+shader_type = "Classic4"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = SubResource("Resource_c8c4r")
+render_layers = 1
+cast_shadow = 1
+shader_params/u_ground_uv_scale_per_texture = null
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = null
+shader_params/u_tile_reduction = null
+shader_params/u_globalmap_blend_start = null
+shader_params/u_globalmap_blend_distance = null
+shader_params/u_colormap_opacity_per_texture = null
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(20.2677, 0, 0, 0, 20.2677, 0, 0, 0, 20.2677, 73.9752, -12.0248, 60.2964)
+mesh = SubResource("BoxMesh_oosjw")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(20.2677, 0, 0, 0, 20.2677, 0, 0, 0, 30.1922, 157.919, -12.0248, 63.537)
+mesh = SubResource("BoxMesh_oosjw")
+skeleton = NodePath("../..")
+
+[node name="attractor" parent="Environment" instance=ExtResource("11_32rkr")]
+transform = Transform3D(5.81262, -4.45743, 0, 8.71236, 2.97386, 0, 0, 0, 7.24341, 144.748, 48.6642, 74.1293)
+
+[node name="attractor2" parent="Environment" instance=ExtResource("11_32rkr")]
+transform = Transform3D(-0.142987, 0.10965, -11.0839, 3.4883, 8.00347, 0.123156, 15.6437, -1.78365, -0.128771, 94.7543, 46.2564, 142.893)
+
+[node name="attractor3" parent="Environment" instance=ExtResource("11_32rkr")]
+transform = Transform3D(-0.0762285, 0.0584561, -5.90901, -8.46197, -0.60736, 0.0412346, -1.18618, 4.32904, 0.0855759, 86.2283, 59.0037, 53.8562)
+
+[node name="low_poly_tree" parent="Environment" instance=ExtResource("12_s4h2k")]
+transform = Transform3D(-2.9719, 0, -0.864204, 0, 3.095, 0, 0.864204, 0, -2.9719, 102.416, 0, 159.205)
+
+[node name="RangeFood" type="Area3D" parent="Environment/low_poly_tree"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00318, 0.1, 1.43611)
+collision_mask = 2
+script = ExtResource("13_0bk5w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/low_poly_tree/RangeFood"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.01587, 0.3, 7.62939e-06)
+shape = SubResource("BoxShape3D_ukkx2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.185015, 0.982736, 0, -0.982736, 0.185015, 86.5228, 20.8075, 0)
+light_bake_mode = 1
+shadow_enabled = true
+
+[node name="AlgogenManager1" parent="." node_paths=PackedStringArray("tree", "base", "gol") instance=ExtResource("14_nu44p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 148.183, 3.07884, 83.549)
+creature_scene = ExtResource("15_oqidd")
+tree = NodePath("../Environment/low_poly_tree/RangeFood")
+base = NodePath("Nid")
+gol = NodePath("GameOfLifeSubViewport/2DGameOfLife")
+
+[node name="GameOfLifeSubViewport" type="SubViewport" parent="AlgogenManager1"]
+disable_3d = true
+size = Vector2i(1600, 1600)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="2DGameOfLife" parent="AlgogenManager1/GameOfLifeSubViewport" instance=ExtResource("16_htu41")]
+
+[node name="GameOfLifePlane" type="MeshInstance3D" parent="AlgogenManager1"]
+transform = Transform3D(6.73642, 0, 0, 0, 6.73642, 0, 0, 0, 6.73642, 5.19151, -10.3684, -24.3258)
+mesh = SubResource("PlaneMesh_kxc5x")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_vdhmf")
+
+[node name="Nid" type="Area3D" parent="AlgogenManager1"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825729, -2.16887, 3.30556)
+collision_mask = 2
+script = ExtResource("17_qng7f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AlgogenManager1/Nid"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.16663, -0.664419, 1.98587)
+shape = SubResource("BoxShape3D_td1y2")
+
+[node name="AlgogenManager2" parent="." node_paths=PackedStringArray("tree", "base", "gol") instance=ExtResource("14_nu44p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.941, 3.07884, 81.1705)
+creature_scene = ExtResource("15_oqidd")
+tree = NodePath("../Environment/low_poly_tree/RangeFood")
+base = NodePath("Nid")
+gol = NodePath("GameOfLifeSubViewport2/2DGameOfLife")
+team = 1
+
+[node name="GameOfLifeSubViewport2" type="SubViewport" parent="AlgogenManager2"]
+disable_3d = true
+size = Vector2i(1600, 1600)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="2DGameOfLife" parent="AlgogenManager2/GameOfLifeSubViewport2" instance=ExtResource("16_htu41")]
+
+[node name="GameOfLifePlane2" type="MeshInstance3D" parent="AlgogenManager2"]
+transform = Transform3D(6.73642, 0, 0, 0, 6.73642, 0, 0, 0, 6.73642, -3.52785, -10.3684, -21.9473)
+mesh = SubResource("PlaneMesh_kxc5x")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_vdhmf")
+
+[node name="Nid" type="Area3D" parent="AlgogenManager2"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.825729, -2.16887, 3.30556)
+collision_mask = 2
+script = ExtResource("17_qng7f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AlgogenManager2/Nid"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.16663, -0.664419, 1.98587)
+shape = SubResource("BoxShape3D_td1y2")
+
+[node name="FpsCounter" parent="." instance=ExtResource("18_v4y8a")]
+
+[node name="MainCamera" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.5174, 0, 90.8366)
+script = ExtResource("19_aake6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_my0ld")
+
+[node name="Camera3D" type="Camera3D" parent="MainCamera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="DetectCreature" type="RayCast3D" parent="."]
+collision_mask = 3
+script = ExtResource("20_fnu2y")
+
+[node name="GenWindow" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -127.0
+offset_right = 15.0
+offset_bottom = -127.0
+grow_vertical = 2
+scale = Vector2(3.62788e+07, 6.95467)
+size_flags_horizontal = 0
+
+[node name="PopupWindow" type="PopupPanel" parent="GenWindow"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+position = Vector2i(45, 195)
+size = Vector2i(200, 300)
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_jq6bb")
+script = ExtResource("21_p46k2")
+
+[node name="Label" type="Label" parent="GenWindow/PopupWindow"]
+offset_right = 200.0
+offset_bottom = 300.0
+text = "
+Genome"
+label_settings = SubResource("LabelSettings_yi802")
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="Environment/low_poly_tree/RangeFood" to="Environment/low_poly_tree/RangeFood" method="_on_body_entered"]
+[connection signal="body_entered" from="AlgogenManager1/Nid" to="AlgogenManager1/Nid" method="_on_body_entered"]
+[connection signal="body_entered" from="AlgogenManager2/Nid" to="AlgogenManager2/Nid" method="_on_body_entered"]
