@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://dxft0fnb4bc18"]
+[gd_scene load_steps=38 format=3 uid="uid://brgtg3twypikf"]
 
 [ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_ci65a"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_6pnjw"]
@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="15_oqidd"]
 [ext_resource type="PackedScene" uid="uid://b6oondow37gp4" path="res://scenes/2d_game_of_life.tscn" id="16_htu41"]
 [ext_resource type="Script" path="res://scripts/stock_food.gd" id="17_qng7f"]
-[ext_resource type="PackedScene" uid="uid://57siin0txr7w" path="res://scenes/fps_counter.tscn" id="18_v4y8a"]
+[ext_resource type="PackedScene" path="res://scenes/fps_counter.tscn" id="18_v4y8a"]
 [ext_resource type="Script" path="res://Scripts/CameraMouvement.gd" id="19_aake6"]
 [ext_resource type="Script" path="res://Scripts/detect_creatures.gd" id="20_fnu2y"]
 [ext_resource type="Script" path="res://Scripts/GenStat.gd" id="21_p46k2"]

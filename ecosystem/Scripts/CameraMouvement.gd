@@ -85,8 +85,8 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 func _input(event):
-	print("is_follow",is_follow)
-	print("rotating_camera",rotating_camera)
+	#print("is_follow",is_follow)
+	#print("rotating_camera",rotating_camera)
 	# Lorsque l'on clique gauche, on capture la souris
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and !is_follow:
 		if event.pressed:

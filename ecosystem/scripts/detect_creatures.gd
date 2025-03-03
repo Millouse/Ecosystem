@@ -13,18 +13,15 @@ func selection_mouse(event : InputEvent)->void:
 		var start = get_viewport().get_camera_3d().project_ray_origin(mouse_position)
 		var direction = get_viewport().get_camera_3d().project_ray_normal(mouse_position)
 		global_transform.origin = start
-		target_position = start + direction *100
-		if(is_colliding() ):
+		target_position = direction * 100  # This is now correctly relative to origin
+		force_raycast_update()  # Force the raycast to update before checking collision
+		if(is_colliding()):
 			var collider = get_collider()
 			collider = collider as Creature
 			if(collider as Creature):
 				cam.set_target(collider)
 				cam.is_follow = true
-			#var came_spec = cam_spec.instantiate()
-			#cam_spec.set_target(collider)
-			#cam_spec.set_target(collider)
 			pass
-
 	
 func _input(event: InputEvent) -> void:
 	selection_mouse(event)
