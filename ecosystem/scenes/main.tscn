@@ -197,7 +197,6 @@ corner_radius_bottom_left = 25
 [sub_resource type="LabelSettings" id="LabelSettings_yi802"]
 font_size = 18
 font_color = Color(0.796661, 0.762097, 0.844328, 1)
-
 [node name="Node3D" type="Node3D"]
 
 [node name="Environment" type="Node3D" parent="."]
