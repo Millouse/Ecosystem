@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://brgtg3twypikf"]
+[gd_scene load_steps=39 format=3 uid="uid://brgtg3twypikf"]
 
 [ext_resource type="Shader" path="res://scripts/shaders/node_3d.gdshader" id="1_ci65a"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="2_6pnjw"]
@@ -21,6 +21,7 @@
 [ext_resource type="Script" path="res://Scripts/CameraMouvement.gd" id="19_aake6"]
 [ext_resource type="Script" path="res://Scripts/detect_creatures.gd" id="20_fnu2y"]
 [ext_resource type="Script" path="res://Scripts/GenStat.gd" id="21_p46k2"]
+[ext_resource type="PackedScene" uid="uid://tea6wawvhrly" path="res://assets/meshes/fence.glb" id="22_3j11m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_41ghe"]
 render_priority = 0
@@ -384,6 +385,24 @@ text = "
 Genome"
 label_settings = SubResource("LabelSettings_yi802")
 horizontal_alignment = 1
+
+[node name="fence" parent="." instance=ExtResource("22_3j11m")]
+transform = Transform3D(461.716, 0, 191.882, 0, 500, 0, -191.882, 0, 461.716, 168.651, -1.70412, 60.2334)
+
+[node name="fence2" parent="." instance=ExtResource("22_3j11m")]
+transform = Transform3D(-44.1603, 0, 498.046, 0, 500, 0, -498.046, 0, -44.1603, 161.515, -1.70412, 41.3764)
+
+[node name="fence3" parent="." instance=ExtResource("22_3j11m")]
+transform = Transform3D(-482.479, 0, 131.204, 0, 500, 0, -131.204, 0, -482.479, 141.386, -1.70412, 42.5741)
+
+[node name="fence4" parent="." instance=ExtResource("22_3j11m")]
+transform = Transform3D(461.716, 0, 191.882, 0, 500, 0, -191.882, 0, 461.716, 90.0155, -1.70412, 60.2334)
+
+[node name="fence5" parent="." instance=ExtResource("22_3j11m")]
+transform = Transform3D(-44.1603, 0, 498.046, 0, 500, 0, -498.046, 0, -44.1603, 82.8796, -1.70412, 41.3764)
+
+[node name="fence6" parent="." instance=ExtResource("22_3j11m")]
+transform = Transform3D(-482.479, 0, 131.204, 0, 500, 0, -131.204, 0, -482.479, 62.75, -1.70412, 42.5741)
 
 [connection signal="body_entered" from="Environment/low_poly_tree/RangeFood" to="Environment/low_poly_tree/RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="AlgogenManager1/Nid" to="AlgogenManager1/Nid" method="_on_body_entered"]
