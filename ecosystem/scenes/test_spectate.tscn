@@ -1,10 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dfkq4mbjcejtt"]
+[gd_scene load_steps=15 format=3 uid="uid://dfkq4mbjcejtt"]
 
-[ext_resource type="Script" path="res://scripts/camera_spectate.gd" id="1_kxv2h"]
 [ext_resource type="Script" path="res://scripts/range_food.gd" id="1_u2tnt"]
 [ext_resource type="PackedScene" uid="uid://d3tfyw8h8qx24" path="res://scenes/creature.tscn" id="2_ooqnq"]
 [ext_resource type="Script" path="res://scripts/stock_food.gd" id="3_fivtd"]
 [ext_resource type="Script" path="res://scripts/detect_creatures.gd" id="4_ndml1"]
+[ext_resource type="Script" path="res://Scripts/GenStat.gd" id="6_twjs4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_753pu"]
 size = Vector3(1.00723, 1.00415, 1.01071)
@@ -20,6 +20,12 @@ size = Vector3(1.00723, 1.00415, 1.01071)
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_invbj"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ftkk8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_v0oax"]
+font_size = 18
+font_color = Color(0.796661, 0.762097, 0.844328, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b2bv7"]
 
 [node name="FoodSystem" type="Node3D"]
 
@@ -42,12 +48,6 @@ shape = SubResource("BoxShape3D_bupvb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Tree"]
 mesh = SubResource("BoxMesh_dvcg0")
-
-[node name="MainCamera" type="Camera3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.402667, 0.915347, 0, -0.915347, 0.402667, -1.40105, 1.79049, 1.38196)
-fov = 90.0
-script = ExtResource("1_kxv2h")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.754274, 0.656559, 0, -0.656559, 0.754274, -1.07707, 3.09945, 3.49181)
@@ -85,6 +85,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_pytgi")
 
 [node name="DetectCreatures" type="RayCast3D" parent="."]
+collision_mask = 3
 script = ExtResource("4_ndml1")
 
 [node name="GenWindow" type="Control" parent="."]
@@ -106,6 +107,7 @@ unique_name_in_owner = true
 position = Vector2i(45, 195)
 size = Vector2i(200, 300)
 visible = true
+script = ExtResource("6_twjs4")
 
 [node name="Label" type="Label" parent="GenWindow/PopupWindow"]
 offset_left = 4.0
@@ -113,7 +115,22 @@ offset_top = 4.0
 offset_right = 196.0
 offset_bottom = 296.0
 text = "Genome"
+label_settings = SubResource("LabelSettings_v0oax")
 horizontal_alignment = 1
+
+[node name="MainCamera" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_b2bv7")
+
+[node name="Camera3D" type="Camera3D" parent="MainCamera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+fov = 90.0
 
 [connection signal="body_entered" from="RangeFood" to="RangeFood" method="_on_body_entered"]
 [connection signal="body_entered" from="Nid" to="Nid" method="_on_body_entered"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=4 uid="uid://d3tfyw8h8qx24"]
 
-[ext_resource type="Script" path="res://Scripts/creature.gd" id="1_5dm7m"]
+[ext_resource type="Script" path="res://Scripts/creature.gd" id="1_wemby"]
 [ext_resource type="Texture2D" uid="uid://dj32terokd4yx" path="res://assets/textures/slime/SlimeTooth_Texture.png" id="3_5dg6s"]
 [ext_resource type="Texture2D" uid="uid://dqttisxoixi4f" path="res://assets/textures/slime/SlimeBody_Texture_Grey.png" id="3_nhitn"]
 
@@ -146,7 +146,6 @@ tracks/5/keys = PackedFloat32Array(0, 1, -0.590922, 0.388345, 0.590922, 0.388345
 [sub_resource type="Animation" id="Animation_v7utl"]
 resource_name = "IDLE"
 length = 1.29167
-loop_mode = 1
 tracks/0/type = "rotation_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -243,11 +242,10 @@ _data = {
 "ROAM": SubResource("Animation_bpn64")
 }
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_pg07e"]
-radius = 0.793565
+[sub_resource type="SphereShape3D" id="SphereShape3D_ugdfr"]
+radius = 0.124765
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_h3543"]
-radius = 3.21201
 
 [node name="Creature" type="RigidBody3D"]
 collision_layer = 2
@@ -256,9 +254,10 @@ axis_lock_angular_x = true
 axis_lock_angular_z = true
 contact_monitor = true
 max_contacts_reported = 3
-script = ExtResource("1_5dm7m")
+script = ExtResource("1_wemby")
 
 [node name="Slime" type="Node3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="Armature" type="Node3D" parent="Slime"]
 
@@ -269,13 +268,13 @@ bones/0/rest = Transform3D(-0.0088793, 0, -0.999961, 0, 1, 0, 0.999961, 0, -0.00
 bones/0/enabled = true
 bones/0/position = Vector3(0, 0, 0)
 bones/0/rotation = Quaternion(0.000488234, -0.710239, -0.000483918, 0.70396)
-bones/0/scale = Vector3(0.999341, 0.999044, 1)
+bones/0/scale = Vector3(0.999341, 0.805141, 1)
 bones/1/name = "Bone.001"
 bones/1/parent = 0
 bones/1/rest = Transform3D(0, 0.957457, -0.288575, 2.68221e-07, 0.288575, 0.957457, 1, -2.98023e-08, -2.38419e-07, 0, 0.836717, 0)
 bones/1/enabled = true
 bones/1/position = Vector3(0, 0.836717, 0)
-bones/1/rotation = Quaternion(-0.422642, -0.566899, -0.422641, 0.566899)
+bones/1/rotation = Quaternion(-0.253559, -0.65855, -0.256259, 0.660569)
 bones/1/scale = Vector3(1, 1, 1)
 bones/2/name = "Bone.002"
 bones/2/parent = 0
@@ -289,7 +288,7 @@ bones/3/parent = 0
 bones/3/rest = Transform3D(0.990526, -0.137323, -1.34464e-08, 0.137323, 0.990526, -1.76866e-09, 1.35619e-08, -9.45937e-11, 1, 0, 0.836717, 0)
 bones/3/enabled = true
 bones/3/position = Vector3(0, 0.836717, 0)
-bones/3/rotation = Quaternion(4.73367e-10, -6.53268e-09, 0.0714826, 0.997442)
+bones/3/rotation = Quaternion(4.87219e-10, -6.76506e-09, 0.0714826, 0.997442)
 bones/3/scale = Vector3(1, 1, 1)
 bones/4/name = "Bone.004"
 bones/4/parent = 0
@@ -311,22 +310,16 @@ surface_material_override/2 = SubResource("StandardMaterial3D_r7x4h")
 libraries = {
 "": SubResource("AnimationLibrary_rckw5")
 }
-autoplay = "IDLE"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.21901, 0)
-shape = SubResource("SphereShape3D_pg07e")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127454, 0)
+shape = SubResource("SphereShape3D_ugdfr")
 
 [node name="JumpTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 autostart = true
 
 [node name="SlackTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-wait_time = 5.0
-one_shot = true
-
-[node name="FleeTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 5.0
 one_shot = true
